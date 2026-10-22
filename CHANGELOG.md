@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `SendWithRetry()` no longer waits a hardcoded 16 seconds: it waits `RetryWait` (10 seconds by default, the default Duplicate SMS window). `maxRetries <= 0` now means no retry instead of a silent 3.
+- ERR028 action text: "Sent to the same number too soon." ERR028 is opt-in per account (Duplicate SMS protection) with a per-account window, not a fixed 15 seconds.
+
+### Docs
+
+- Test mode: test messages are queued but not delivered, and their credits are held until you delete them from the Sending Queue. Earlier text said no credits were consumed.
+
 ## [0.4.1] - 2026-10-29
 
 ### Changed

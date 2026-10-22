@@ -288,7 +288,7 @@ Done.
 | ERR006 | Invalid mobile number format | Use international format with country code, digits only |
 | ERR010 | No balance | Recharge at kwtsms.com |
 | ERR025 | Empty or invalid mobile field | Provide at least one valid number |
-| ERR028 | Rate limited (same number within 15s) | Wait 15 seconds before resending to the same number |
+| ERR028 | Sent to the same number too soon. | Duplicate SMS protection is on for the account: wait for its window (10 seconds by default) before resending |
 | ERR030 | Message stuck in queue | Normal for test mode. In live mode, check message content for emoji or hidden characters |
 
 ## Notes

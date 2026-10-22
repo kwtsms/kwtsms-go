@@ -31,7 +31,7 @@ var (
 	username = "your_api_username"
 	password = "your_api_password"
 	senderID = "KWT-SMS"
-	testMode = "1" // "1" = test (queued, not delivered, no credits consumed)
+	testMode = "1" // "1" = test (queued, not delivered; credits held until you delete it from the Sending Queue). 2026-10-22 15:33 +03: corrected, test sends are not free
 	//                "0" = live (delivered to handsets, credits consumed)
 )
 

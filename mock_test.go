@@ -267,7 +267,7 @@ func TestMockSendERR028RateLimit(t *testing.T) {
 			jsonResponse(w, map[string]any{
 				"result":      "ERROR",
 				"code":        "ERR028",
-				"description": "Wait 15 seconds.",
+				"description": "Sent to the same number too soon.",
 			})
 		},
 	})
@@ -277,8 +277,9 @@ func TestMockSendERR028RateLimit(t *testing.T) {
 		if result.Code != "ERR028" {
 			t.Errorf("code = %q, want ERR028", result.Code)
 		}
-		if !strings.Contains(result.Action, "15 seconds") {
-			t.Errorf("action should mention 15 seconds: %q", result.Action)
+		// 2026-10-22 15:33 +03: the action no longer names a fixed 15 s window.
+		if !strings.Contains(result.Action, "too soon") {
+			t.Errorf("action should say too soon: %q", result.Action)
 		}
 	})
 }

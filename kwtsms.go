@@ -48,7 +48,8 @@ func WithSenderID(id string) Option {
 	return func(c *KwtSMS) { c.senderID = id }
 }
 
-// WithTestMode enables test mode (messages queued but not delivered, no credits consumed).
+// WithTestMode enables test mode (messages queued but not delivered; credits held until you delete them from the Sending Queue).
+// 2026-10-22 15:33 +03: corrected; test sends hold credits, they are not free.
 func WithTestMode(enabled bool) Option {
 	return func(c *KwtSMS) { c.testMode = enabled }
 }
@@ -519,11 +520,21 @@ func (c *KwtSMS) sendMulti(rawList []string, message string, sender string) (*Se
 	return result, nil
 }
 
-// SendWithRetry sends SMS, retrying automatically on ERR028 (rate limit: wait 15 seconds).
-// Waits 16 seconds between retries. All other errors are returned immediately.
+// RetryWait is how long SendWithRetry waits before resending after ERR028.
+// 2026-10-22 15:33 +03: added; replaces the hardcoded 16 s. ERR028 is opt-in per account
+// (Duplicate SMS protection) and its window is set per account (10 seconds by default),
+// so set this to your account's window if you changed it.
+var RetryWait = 10 * time.Second
+
+// SendWithRetry sends SMS and, only when maxRetries > 0, resends on ERR028 after waiting RetryWait.
+// ERR028 means Duplicate SMS protection is on for the account and a number in the request was sent
+// the same message within the account's window; the whole request was rejected and nothing was charged.
+// All other errors are returned immediately.
 func (c *KwtSMS) SendWithRetry(mobile string, message string, sender string, maxRetries int) (*SendResult, error) {
-	if maxRetries <= 0 {
-		maxRetries = 3
+	// 2026-10-22 15:33 +03: maxRetries <= 0 now means no retry (was a silent default of 3),
+	// so retrying happens only when the caller asks for it.
+	if maxRetries < 0 {
+		maxRetries = 0
 	}
 
 	result, err := c.Send(mobile, message, sender)
@@ -533,7 +544,7 @@ func (c *KwtSMS) SendWithRetry(mobile string, message string, sender string, max
 
 	retries := 0
 	for result.Code == "ERR028" && retries < maxRetries {
-		time.Sleep(16 * time.Second)
+		time.Sleep(RetryWait) // 2026-10-22 15:33 +03: was a hardcoded 16 s; the window is per account
 		result, err = c.Send(mobile, message, sender)
 		if err != nil {
 			return result, err

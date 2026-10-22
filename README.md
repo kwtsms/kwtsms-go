@@ -194,9 +194,12 @@ result, err := sms.Send("96598765432", "Hello", "OTHER-SENDER")
 ### Send with Retry (ERR028)
 
 ```go
-// Auto-retries on ERR028 (15-second rate limit), waits 16s between retries
+// Resends on ERR028 up to 3 times, waiting kwtsms.RetryWait (10s by default) between attempts.
+// maxRetries 0 means no retry.
 result, err := sms.SendWithRetry("96598765432", "Hello", "", 3)
 ```
+
+ERR028 only happens when Duplicate SMS protection is turned on in your account's API settings. The window is set per account (10 seconds by default); if you changed it, set `kwtsms.RetryWait` to match.
 
 ### Bulk Send (>200 numbers)
 
@@ -457,7 +460,7 @@ Numbers must be in international format with country code. Arabic-Indic (U+0660-
 
 ## Test Mode
 
-**Test mode** (`KWTSMS_TEST_MODE=1`) sends your message to the kwtSMS queue but does NOT deliver it to the handset. No SMS credits are consumed. Use during development and testing.
+**Test mode** (`KWTSMS_TEST_MODE=1`) sends your message to the kwtSMS queue but does NOT deliver it to the handset. Its credits are held until you delete it from the Sending Queue in your kwtsms.com account. Use during development and testing.
 
 **Live mode** (`KWTSMS_TEST_MODE=0`) delivers the message for real and deducts credits.
 
@@ -552,7 +555,7 @@ For OTP/authentication, you **must** use a Transactional sender ID. Promotional 
 
 ### 6. Rate limiting
 
-Wait at least **15 seconds** before sending to the same number again (ERR028). The entire request is rejected if any number in a batch triggers this, even if other numbers are fine.
+ERR028 is opt-in: it applies only when Duplicate SMS protection is turned on in your account's API settings. When it is on and any number in the request was sent the same message within the account's window (10 seconds by default, configurable per account), the entire request is rejected with ERR028, even if other numbers are fine, and nothing is charged.
 
 ### 7. Monitoring and alerting
 
@@ -626,7 +629,7 @@ go test -v ./...
 # With race detector
 go test -race ./...
 
-# Integration tests (hits live API with test_mode=true, no credits consumed)
+# Integration tests (real API, test mode: not delivered; delete the queued test messages from the Sending Queue to release their held credits)
 GO_USERNAME=go_user GO_PASSWORD=go_pass go test -v -tags integration ./...
 ```
 
@@ -648,7 +651,7 @@ Check the **Sending Queue** at [kwtsms.com](https://www.kwtsms.com/login/). If y
 
 **2. What is the difference between Test mode and Live mode?**
 
-**Test mode** (`KWTSMS_TEST_MODE=1`) sends your message to the kwtSMS queue but does NOT deliver it to the handset. No SMS credits are consumed. Use during development. **Live mode** (`KWTSMS_TEST_MODE=0`) delivers the message for real and deducts credits. Always develop in test mode and switch to live only when ready for production.
+**Test mode** (`KWTSMS_TEST_MODE=1`) sends your message to the kwtSMS queue but does NOT deliver it to the handset. Its credits are held until you delete it from the Sending Queue in your kwtsms.com account. Use during development. **Live mode** (`KWTSMS_TEST_MODE=0`) delivers the message for real and deducts credits. Always develop in test mode and switch to live only when ready for production.
 
 **3. What is a Sender ID and why should I not use "KWT-SMS" in production?**
 
