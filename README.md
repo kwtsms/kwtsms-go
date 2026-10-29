@@ -1,12 +1,12 @@
 # kwtSMS Go Client
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/boxlinknet/kwtsms-go.svg)](https://pkg.go.dev/github.com/boxlinknet/kwtsms-go)
-[![CI](https://github.com/boxlinknet/kwtsms-go/actions/workflows/ci.yml/badge.svg)](https://github.com/boxlinknet/kwtsms-go/actions/workflows/ci.yml)
-[![CodeQL](https://github.com/boxlinknet/kwtsms-go/actions/workflows/codeql.yml/badge.svg)](https://github.com/boxlinknet/kwtsms-go/actions/workflows/codeql.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/boxlinknet/kwtsms-go)](https://goreportcard.com/report/github.com/boxlinknet/kwtsms-go)
+[![Go Reference](https://pkg.go.dev/badge/github.com/kwtsms/kwtsms-go.svg)](https://pkg.go.dev/github.com/kwtsms/kwtsms-go)
+[![CI](https://github.com/kwtsms/kwtsms-go/actions/workflows/ci.yml/badge.svg)](https://github.com/kwtsms/kwtsms-go/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/kwtsms/kwtsms-go/actions/workflows/codeql.yml/badge.svg)](https://github.com/kwtsms/kwtsms-go/actions/workflows/codeql.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/kwtsms/kwtsms-go)](https://goreportcard.com/report/github.com/kwtsms/kwtsms-go)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/boxlinknet/kwtsms-go)](https://github.com/boxlinknet/kwtsms-go)
-[![Release](https://img.shields.io/github/v/release/boxlinknet/kwtsms-go)](https://github.com/boxlinknet/kwtsms-go/releases)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/kwtsms/kwtsms-go)](https://github.com/kwtsms/kwtsms-go)
+[![Release](https://img.shields.io/github/v/release/kwtsms/kwtsms-go)](https://github.com/kwtsms/kwtsms-go/releases)
 
 Go client library for the [kwtSMS SMS API](https://www.kwtsms.com). Zero external dependencies. Go 1.18+.
 
@@ -40,7 +40,7 @@ go mod init my-project
 ### Step 3: Install kwtsms
 
 ```bash
-go get github.com/boxlinknet/kwtsms-go
+go get github.com/kwtsms/kwtsms-go
 ```
 
 ## Quick Start
@@ -52,7 +52,7 @@ import (
     "fmt"
     "log"
 
-    kwtsms "github.com/boxlinknet/kwtsms-go"
+    kwtsms "github.com/kwtsms/kwtsms-go"
 )
 
 func main() {
@@ -86,7 +86,7 @@ func main() {
 
 ### CLI Tool
 
-For a standalone command-line tool (all platforms), see [kwtsms-cli](https://github.com/boxlinknet/kwtsms-cli).
+For a standalone command-line tool (all platforms), see [kwtsms-cli](https://github.com/kwtsms/kwtsms-cli).
 
 ### Environment variables
 
@@ -673,7 +673,7 @@ International sending is **disabled by default** on kwtSMS accounts. [Log in to 
 - **[Sender ID Help](https://www.kwtsms.com/sender-id-help.html)**: Sender ID registration and guidelines
 - **[kwtSMS Dashboard](https://www.kwtsms.com/login/)**: Recharge credits, buy Sender IDs, view message logs, manage coverage
 - **[Other Integrations](https://www.kwtsms.com/integrations.html)**: Plugins and integrations for other platforms and languages
-- **[Library Issues](https://github.com/boxlinknet/kwtsms-go/issues)**: Report bugs or request features for this Go client
+- **[Library Issues](https://github.com/kwtsms/kwtsms-go/issues)**: Report bugs or request features for this Go client
 
 ## License
 

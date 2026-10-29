@@ -8,7 +8,7 @@
 ## Setup
 
 ```bash
-git clone https://github.com/boxlinknet/kwtsms-go.git
+git clone https://github.com/kwtsms/kwtsms-go.git
 cd kwtsms-go
 go mod download
 ```

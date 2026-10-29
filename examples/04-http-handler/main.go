@@ -12,7 +12,7 @@ import (
 	"os"
 	"strings"
 
-	kwtsms "github.com/boxlinknet/kwtsms-go"
+	kwtsms "github.com/kwtsms/kwtsms-go"
 )
 
 // smsRequest is the expected JSON body for POST /send.

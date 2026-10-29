@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"strings"
 
-	kwtsms "github.com/boxlinknet/kwtsms-go"
+	kwtsms "github.com/kwtsms/kwtsms-go"
 )
 
 func main() {

@@ -73,7 +73,7 @@ endif
 	sed -i "s/## \[Unreleased\]/## [Unreleased]\n\n## [$(VERSION)] - $$TODAY/" CHANGELOG.md
 	@# Add release link before first existing link
 	@PREV=$$(grep -oP '^\[\K[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | head -2 | tail -1); \
-	sed -i "/^\[$$PREV\]:/i [$(VERSION)]: https://github.com/boxlinknet/kwtsms-go/releases/tag/v$(VERSION)" CHANGELOG.md
+	sed -i "/^\[$$PREV\]:/i [$(VERSION)]: https://github.com/kwtsms/kwtsms-go/releases/tag/v$(VERSION)" CHANGELOG.md
 	@# 6. Commit, tag, push
 	@echo "--- Committing and tagging ---"
 	git add kwtsms.go CHANGELOG.md
@@ -83,5 +83,5 @@ endif
 	git push origin main "v$(VERSION)"
 	@echo ""
 	@echo "=== v$(VERSION) released! ==="
-	@echo "  GitHub Release: https://github.com/boxlinknet/kwtsms-go/releases/tag/v$(VERSION)"
-	@echo "  pkg.go.dev:     https://pkg.go.dev/github.com/boxlinknet/kwtsms-go@v$(VERSION)"
+	@echo "  GitHub Release: https://github.com/kwtsms/kwtsms-go/releases/tag/v$(VERSION)"
+	@echo "  pkg.go.dev:     https://pkg.go.dev/github.com/kwtsms/kwtsms-go@v$(VERSION)"

@@ -28,7 +28,7 @@ import (
 	"sync"
 	"time"
 
-	kwtsms "github.com/boxlinknet/kwtsms-go"
+	kwtsms "github.com/kwtsms/kwtsms-go"
 )
 
 // OTP configuration

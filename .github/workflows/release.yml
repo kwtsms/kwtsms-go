@@ -36,5 +36,5 @@ jobs:
       - name: Warm Go module proxy
         run: |
           TAG="${GITHUB_REF#refs/tags/}"
-          curl -sf "https://proxy.golang.org/github.com/boxlinknet/kwtsms-go/@v/${TAG}.info" || true
-          curl -sf "https://sum.golang.org/lookup/github.com/boxlinknet/kwtsms-go@${TAG}" || true
+          curl -sf "https://proxy.golang.org/github.com/kwtsms/kwtsms-go/@v/${TAG}.info" || true
+          curl -sf "https://sum.golang.org/lookup/github.com/kwtsms/kwtsms-go@${TAG}" || true

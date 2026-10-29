@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-10-29
+
+### Changed
+- The repository moved to the kwtSMS GitHub organization. The module path is now `github.com/kwtsms/kwtsms-go`; update your imports. Old versions keep working from the old path through GitHub's redirect. No code changes.
+
 ## [0.4.0] - 2026-03-13
 
 ### Added
@@ -18,14 +23,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- CLI tool (`cmd/kwtsms/`): moved to dedicated repo [kwtsms-cli](https://github.com/boxlinknet/kwtsms-cli)
+- CLI tool (`cmd/kwtsms/`): moved to dedicated repo [kwtsms-cli](https://github.com/kwtsms/kwtsms-cli)
 - CLI cross-compilation from release workflow
 
 ### Fixed
 
 - All golangci-lint errcheck, staticcheck, and unused warnings resolved
 
-[0.4.0]: https://github.com/boxlinknet/kwtsms-go/releases/tag/v0.4.0
+[0.4.0]: https://github.com/kwtsms/kwtsms-go/releases/tag/v0.4.0
 
 ## [0.3.0] - 2026-03-07
 
@@ -93,6 +98,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CodeQL security scanning and Dependabot dependency updates
 - Five runnable examples: basic usage, OTP flow, bulk SMS, HTTP handler, error handling
 
-[0.3.0]: https://github.com/boxlinknet/kwtsms-go/releases/tag/v0.3.0
-[0.2.0]: https://github.com/boxlinknet/kwtsms-go/releases/tag/v0.2.0
-[0.1.0]: https://github.com/boxlinknet/kwtsms-go/releases/tag/v0.1.0
+[0.3.0]: https://github.com/kwtsms/kwtsms-go/releases/tag/v0.3.0
+[0.2.0]: https://github.com/kwtsms/kwtsms-go/releases/tag/v0.2.0
+[0.1.0]: https://github.com/kwtsms/kwtsms-go/releases/tag/v0.1.0

@@ -9,7 +9,7 @@ This example shows how to call every kwtSMS API endpoint using **only the Go sta
 - You are building your own wrapper or integrating into an existing HTTP stack
 - You want a quick reference for endpoint URLs, payloads, and responses
 
-For production use, the [kwtsms-go client library](https://github.com/boxlinknet/kwtsms-go) handles phone normalization, message cleaning, bulk batching, retry logic, error enrichment, and JSONL logging automatically.
+For production use, the [kwtsms-go client library](https://github.com/kwtsms/kwtsms-go) handles phone normalization, message cleaning, bulk batching, retry logic, error enrichment, and JSONL logging automatically.
 
 ## Endpoints covered
 
