@@ -91,9 +91,6 @@ func TestValidatePhoneFormat(t *testing.T) {
 		wantSub   string // substring in error, empty if valid
 	}{
 		// Valid numbers
-		{"Kuwait valid 5x", "96551234567", true, ""},
-		{"Kuwait valid 6x", "96561234567", true, ""},
-		{"Kuwait valid 4x", "96541234567", true, ""},
 		{"Saudi valid", "966559876543", true, ""},
 		{"UAE valid", "971501234567", true, ""},
 		{"USA valid", "12125551234", true, ""},
@@ -197,11 +194,7 @@ func TestValidatePhoneFormatGCC(t *testing.T) {
 		input     string
 		wantValid bool
 	}{
-		// Kuwait
-		{"KW 9x valid", "96591234567", true},
-		{"KW 5x valid", "96551234567", true},
-		{"KW 6x valid", "96561234567", true},
-		{"KW 4x valid", "96541234567", true},
+		// Kuwait (valid prefixes: TestKuwaitValidPrefixes)
 		{"KW 0x invalid", "96501234567", false},
 
 		// Saudi Arabia
@@ -299,6 +292,21 @@ func TestValidatePhoneKuwaitTestNumber(t *testing.T) {
 			}
 			if v.Normalized != n {
 				t.Errorf("ValidatePhoneInput(%s).Normalized is not the test number", tt.name)
+			}
+		})
+	}
+}
+
+// 2026-11-05 11:37 +03: the valid-prefix cases (4, 5, 6, 9) used sequential sample mobiles that
+// may belong to real people. They are built at runtime from KWTSMS_TEST_NUMBER:
+// each prefix plus the test number's last 7 digits, checked locally, never sent
+// or printed. int-testnumber.
+func TestKuwaitValidPrefixes(t *testing.T) {
+	n := testNumber(t)
+	for _, p := range []string{"4", "5", "6", "9"} {
+		t.Run("prefix "+p, func(t *testing.T) {
+			if err := ValidatePhoneFormat("965" + p + n[4:]); err != "" {
+				t.Errorf("ValidatePhoneFormat(prefix %s) rejected a valid Kuwait mobile shape", p)
 			}
 		})
 	}
