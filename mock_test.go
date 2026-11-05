@@ -2,6 +2,7 @@ package kwtsms
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -618,6 +619,58 @@ func TestMockHTTP4xxWithJSON(t *testing.T) {
 		}
 		if result.Code != "ERR003" {
 			t.Errorf("code = %q, want ERR003", result.Code)
+		}
+	})
+}
+
+// 2026-11-05 08:02 +03: offline replacement for the removed live 250-number send (Boss 07:24,
+// int-testnumber). The numbers are generated at runtime and only reach the mock server.
+func TestMockBulkSend250Batches(t *testing.T) {
+	var batchSizes []int
+	balance := 1000.0
+	handler := apiRouter(map[string]http.HandlerFunc{
+		"send": func(w http.ResponseWriter, r *http.Request) {
+			var body map[string]any
+			_ = json.NewDecoder(r.Body).Decode(&body)
+			mobile, _ := body["mobile"].(string)
+			n := len(strings.Split(mobile, ","))
+			batchSizes = append(batchSizes, n)
+			balance -= float64(n)
+			jsonResponse(w, map[string]any{
+				"result":         "OK",
+				"msg-id":         fmt.Sprintf("batch%d", len(batchSizes)),
+				"numbers":        n,
+				"points-charged": n,
+				"balance-after":  balance,
+				"unix-timestamp": 1700000000,
+			})
+		},
+	})
+
+	numbers := make([]string, 250)
+	for i := range numbers {
+		numbers[i] = fmt.Sprintf("9655%07d", i)
+	}
+
+	withMockServer(t, handler, func(c *KwtSMS) {
+		result, err := c.Send(strings.Join(numbers, ","), "Bulk test", "")
+		if err != nil {
+			t.Fatalf("Send error: %v", err)
+		}
+		if result.Result != "OK" {
+			t.Fatalf("expected OK, got %s (%s)", result.Result, result.Code)
+		}
+		if len(batchSizes) != 2 || batchSizes[0] != 200 || batchSizes[1] != 50 {
+			t.Errorf("expected batches [200 50], got %v", batchSizes)
+		}
+		if result.Numbers != 250 || result.PointsCharged != 250 {
+			t.Errorf("expected 250 numbers and 250 points, got %d and %d", result.Numbers, result.PointsCharged)
+		}
+		if result.BalanceAfter != 750 {
+			t.Errorf("expected balance-after 750, got %.2f", result.BalanceAfter)
+		}
+		if result.MsgID != "batch1" {
+			t.Errorf("expected first batch msg-id, got %q", result.MsgID)
 		}
 	})
 }
