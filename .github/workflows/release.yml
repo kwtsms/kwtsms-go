@@ -18,6 +18,12 @@ jobs:
         with:
           go-version: '1.22'
 
+      # 2026-11-05 14:18 +03: Version is sent in the User-Agent, so it must equal the tag (#939).
+      - name: Check Version matches the tag
+        run: |
+          v=$(grep -oE '^const Version = "[^"]+"' kwtsms.go | cut -d'"' -f2)
+          [ "v$v" = "${GITHUB_REF_NAME}" ] || { echo "::error::Version ($v) does not match tag ${GITHUB_REF_NAME}"; exit 1; }
+
       - name: Generate release notes from CHANGELOG
         run: |
           TAG="${GITHUB_REF#refs/tags/}"

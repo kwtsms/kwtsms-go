@@ -119,6 +119,16 @@ sms, err := kwtsms.New("username", "password",
 
 Environment variables take priority over `.env` file values.
 
+### User-Agent
+
+Every API request carries the User-Agent `kwtsms-go/<version>`: the library name and version only, no
+personal or customer data. Pass your own product token with `WithAppName` to put it in front:
+
+```go
+sms, err := kwtsms.New("username", "password", kwtsms.WithAppName("my-shop/2.1.0"))
+// User-Agent: my-shop/2.1.0 kwtsms-go/0.4.0
+```
+
 ## Credential Management
 
 **Never hardcode credentials in source code.** Credentials must be changeable without recompiling.

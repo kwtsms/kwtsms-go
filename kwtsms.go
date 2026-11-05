@@ -26,7 +26,8 @@ import (
 	"time"
 )
 
-// Version is the library version.
+// Version is the library version, sent in the User-Agent. The release workflow fails when it differs from the tag.
+// 2026-11-05 14:17 +03: now sent as kwtsms-go/<Version> so kwtSMS can count accounts per integration (#939).
 const Version = "0.4.0"
 
 // KwtSMS is the kwtSMS API client. Safe for concurrent use.
@@ -40,6 +41,7 @@ type KwtSMS struct {
 	mu         sync.Mutex
 	balance   *float64
 	purchased *float64
+	userAgent  string // 2026-11-05 14:17 +03: User-Agent sent on every call (#939)
 }
 
 // Option configures a KwtSMS client.
@@ -66,6 +68,13 @@ func WithHTTPClient(c *http.Client) Option {
 	return func(k *KwtSMS) { k.httpClient = c }
 }
 
+// WithAppName sets the product token of the calling app or plugin, e.g. "kwtsms-wordpress/3.5.2",
+// sent before the library token in the User-Agent. It is sanitized by BuildUserAgent.
+// 2026-11-05 14:17 +03: added for per-integration counts (#939).
+func WithAppName(name string) Option {
+	return func(k *KwtSMS) { k.userAgent = BuildUserAgent(name) }
+}
+
 // New creates a new KwtSMS client with the given credentials.
 //
 // username and password are your kwtSMS API credentials (not your account
@@ -82,6 +91,8 @@ func New(username, password string, opts ...Option) (*KwtSMS, error) {
 		password: cr.Replace(password),
 		senderID: "KWT-SMS",
 		logFile:  "kwtsms.log",
+		// 2026-11-05 14:17 +03: library token by default; WithAppName prepends the caller's token (#939).
+		userAgent: BuildUserAgent(""),
 	}
 	for _, opt := range opts {
 		opt(c)

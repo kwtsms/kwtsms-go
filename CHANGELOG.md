@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- The client sends a User-Agent `kwtsms-go/<version>` (name and version only, no personal data) so kwtSMS can see which integrations are in use. A new `WithAppName` option puts your app's token in front, e.g. `kwtsms-wordpress/3.5.2 kwtsms-go/0.4.0`. New `BuildUserAgent()` and `(*KwtSMS).UserAgent()`; the release workflow fails if `Version` does not match the tag.
+
 ### Changed
 
 - `SendWithRetry()` no longer waits a hardcoded 16 seconds: it waits `RetryWait` (10 seconds by default, the default Duplicate SMS window). `maxRetries <= 0` now means no retry instead of a silent 3.

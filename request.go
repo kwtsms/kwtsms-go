@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -13,6 +14,37 @@ const baseURL = "https://www.kwtsms.com/API/"
 
 var httpClient = &http.Client{
 	Timeout: 15 * time.Second,
+}
+
+// BuildUserAgent returns the User-Agent "[app token ]kwtsms-go/<Version>". The app token is caller input:
+// anything outside printable ASCII is removed (CR/LF would split the header), whitespace runs become '-',
+// leading/trailing '-' are trimmed, and it is cut to 64 characters. Empty means the library token only.
+// 2026-11-05 14:17 +03: added so kwtSMS can count accounts per integration (#939).
+func BuildUserAgent(appName string) string {
+	var b strings.Builder
+	for _, r := range appName {
+		if r >= 0x20 && r <= 0x7e {
+			b.WriteRune(r)
+		}
+	}
+	app := strings.Trim(strings.Join(strings.Fields(b.String()), "-"), "-")
+	if len(app) > 64 {
+		app = app[:64]
+	}
+	lib := "kwtsms-go/" + Version
+	if app == "" {
+		return lib
+	}
+	return app + " " + lib
+}
+
+// UserAgent returns the User-Agent this client sends on every API call.
+// 2026-11-05 14:17 +03: added for per-integration counts (#939).
+func (c *KwtSMS) UserAgent() string {
+	if c.userAgent == "" {
+		return BuildUserAgent("")
+	}
+	return c.userAgent
 }
 
 // request POSTs JSON to a kwtSMS API endpoint and returns the parsed response.
@@ -39,6 +71,8 @@ func (c *KwtSMS) request(endpoint string, payload map[string]any) (map[string]an
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
+	// 2026-11-05 14:17 +03: kwtsms-go/<Version>, app token first when given (#939).
+	req.Header.Set("User-Agent", c.UserAgent())
 
 	hc := httpClient
 	if c.httpClient != nil {
