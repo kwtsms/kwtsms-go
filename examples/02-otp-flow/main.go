@@ -20,7 +20,8 @@ func main() {
 	}
 
 	// The phone number to send the OTP to.
-	phone := "+965 9876 5432"
+	// 2026-11-05 07:14 +03: placeholder 965XXXXXXXX instead of a sample mobile number, int-testnumber.
+	phone := "+965 XXXX XXXX"
 
 	// Step 1: Validate the phone number before sending.
 	// ValidatePhoneInput catches common mistakes: empty input, email addresses,

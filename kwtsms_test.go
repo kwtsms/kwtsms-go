@@ -144,10 +144,12 @@ func TestSendWithEmailInput(t *testing.T) {
 }
 
 func TestSendWithEmptyMessage(t *testing.T) {
+	// 2026-11-05 07:14 +03: number from KWTSMS_TEST_NUMBER (skips when unset), int-testnumber
+	n := testNumber(t)
 	c, _ := New("user", "pass", WithLogFile(""))
 
 	// Message that becomes empty after cleaning (only emojis)
-	result, err := c.Send("96598765432", "😀🎉", "")
+	result, err := c.Send(n, "😀🎉", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -157,8 +159,10 @@ func TestSendWithEmptyMessage(t *testing.T) {
 }
 
 func TestSendDeduplicatesNumbers(t *testing.T) {
-	// These all normalize to the same number: 96598765432
-	mobiles := []string{"+96598765432", "0096598765432", "96598765432"}
+	// 2026-11-05 07:14 +03: number from KWTSMS_TEST_NUMBER (skips when unset), int-testnumber
+	n := testNumber(t)
+	// These all normalize to the same number
+	mobiles := []string{"+" + n, "00" + n, n}
 
 	var validNumbers []string
 	seen := make(map[string]bool)
@@ -174,10 +178,10 @@ func TestSendDeduplicatesNumbers(t *testing.T) {
 	}
 
 	if len(validNumbers) != 1 {
-		t.Errorf("dedup should produce 1 number, got %d: %v", len(validNumbers), validNumbers)
+		t.Fatalf("dedup should produce 1 number, got %d", len(validNumbers))
 	}
-	if validNumbers[0] != "96598765432" {
-		t.Errorf("deduped number = %q, want \"96598765432\"", validNumbers[0])
+	if validNumbers[0] != n {
+		t.Error("deduped number is not the test number")
 	}
 }
 

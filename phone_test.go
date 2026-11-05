@@ -10,19 +10,8 @@ func TestNormalizePhone(t *testing.T) {
 		input string
 		want  string
 	}{
-		{"+96598765432", "96598765432"},
-		{"0096598765432", "96598765432"},
-		{"965 9876 5432", "96598765432"},
-		{"965-9876-5432", "96598765432"},
-		{"(965) 9876-5432", "96598765432"},
-		{"٩٦٥٩٨٧٦٥٤٣٢", "96598765432"},   // Arabic-Indic digits
-		{"۹۶۵۹۸۷۶۵۴۳۲", "96598765432"},   // Extended Arabic-Indic / Persian
-		{"+965.9876.5432", "96598765432"},
 		{"", ""},
 		{"   ", ""},
-		{"00096598765432", "96598765432"}, // triple leading zeros
-		{"96598765432", "96598765432"},    // already clean
-		{"  +965 9876 5432  ", "96598765432"},
 		{"abc", ""},
 		{"---", ""},
 
@@ -73,7 +62,8 @@ func TestFindCountryCode(t *testing.T) {
 		input string
 		want  string
 	}{
-		{"96598765432", "965"},   // Kuwait (3-digit)
+		// 2026-11-05 07:14 +03: placeholder, prefix lookup only, int-testnumber
+		{testNumberPlaceholder, "965"}, // Kuwait (3-digit)
 		{"966559876543", "966"}, // Saudi (3-digit)
 		{"44712345678", "44"},   // UK (2-digit)
 		{"12125551234", "1"},    // USA (1-digit)
@@ -101,7 +91,6 @@ func TestValidatePhoneFormat(t *testing.T) {
 		wantSub   string // substring in error, empty if valid
 	}{
 		// Valid numbers
-		{"Kuwait valid 9x", "96598765432", true, ""},
 		{"Kuwait valid 5x", "96551234567", true, ""},
 		{"Kuwait valid 6x", "96561234567", true, ""},
 		{"Kuwait valid 4x", "96541234567", true, ""},
@@ -112,8 +101,8 @@ func TestValidatePhoneFormat(t *testing.T) {
 		{"Egypt valid", "201012345678", true, ""},  // 20 + 1012345678 (10 local digits, starts with 1)
 
 		// Invalid length
-		{"Kuwait too short", "9659876543", false, "expected 8 digits after +965"},
-		{"Kuwait too long", "965987654321", false, "expected 8 digits after +965"},
+		{"Kuwait too short", "9655123456", false, "expected 8 digits after +965"},
+		{"Kuwait too long", "965512345678", false, "expected 8 digits after +965"},
 		{"Saudi wrong length", "96655987654", false, "expected 9 digits after +966"},
 
 		// Invalid mobile prefix
@@ -159,9 +148,6 @@ func TestValidatePhoneInput(t *testing.T) {
 		wantErrSub string // substring expected in error message
 	}{
 		// Basic validation (same as before)
-		{"valid Kuwait", "+96598765432", true, "96598765432", ""},
-		{"valid 00 prefix", "0096598765432", true, "96598765432", ""},
-		{"valid Arabic digits", "٩٦٥٩٨٧٦٥٤٣٢", true, "96598765432", ""},
 		{"valid minimum 7 digits", "9991234", true, "9991234", ""},
 		{"valid maximum 15 digits", "999123456789012", true, "999123456789012", ""},
 		{"empty", "", false, "", "required"},
@@ -176,12 +162,11 @@ func TestValidatePhoneInput(t *testing.T) {
 		{"email with numbers", "test123@gmail.com", false, "", "email address"},
 
 		// Country-specific validation via ValidatePhoneInput
-		{"Kuwait valid 9x", "+96598765432", true, "96598765432", ""},
 		{"Kuwait invalid prefix 1x", "+96512345678", false, "96512345678", "must start with"},
 		{"Saudi valid", "+966559876543", true, "966559876543", ""},
 		{"Saudi with trunk 0", "+9660559876543", true, "966559876543", ""},
 		{"Saudi invalid prefix", "+966612345678", false, "966612345678", "must start with 5"},
-		{"Kuwait wrong length", "+9659876543", false, "9659876543", "expected 8 digits"},
+		{"Kuwait wrong length", "+9655123456", false, "9655123456", "expected 8 digits"},
 		{"UAE valid", "+971501234567", true, "971501234567", ""},
 		{"Egypt valid", "+201012345678", true, "201012345678", ""},
 	}
@@ -253,6 +238,67 @@ func TestValidatePhoneFormatGCC(t *testing.T) {
 			}
 			if !tt.wantValid && err == "" {
 				t.Errorf("ValidatePhoneFormat(%q) = valid, want error", tt.input)
+			}
+		})
+	}
+}
+
+// 2026-11-05 07:14 +03: Kuwait cases moved here from the tables above; the
+// number comes from KWTSMS_TEST_NUMBER (testNumber, skips when unset) and its
+// format variants are built at runtime. Invalid-length samples changed to
+// 9655123456 / 965512345678. Subtest names and failure messages never contain
+// the number. int-testnumber.
+func TestNormalizePhoneKuwaitVariants(t *testing.T) {
+	n := testNumber(t)
+	cc, a, b := splitKW(n)
+	tests := []struct {
+		name  string
+		input string
+	}{
+		{"plus prefix", "+" + n},
+		{"00 prefix", "00" + n},
+		{"spaces", cc + " " + a + " " + b},
+		{"dashes", cc + "-" + a + "-" + b},
+		{"parens and dash", "(" + cc + ") " + a + "-" + b},
+		{"Arabic-Indic digits", toArabicIndic(n)},
+		{"Persian digits", toPersian(n)},
+		{"dots", "+" + cc + "." + a + "." + b},
+		{"triple leading zeros", "000" + n},
+		{"already clean", n},
+		{"padded with spaces", "  +" + cc + " " + a + " " + b + "  "},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NormalizePhone(tt.input); got != n {
+				t.Errorf("NormalizePhone(%s) did not return the test number", tt.name)
+			}
+		})
+	}
+}
+
+// 2026-11-05 07:14 +03: Kuwait valid cases for ValidatePhoneFormat and
+// ValidatePhoneInput, from KWTSMS_TEST_NUMBER. int-testnumber.
+func TestValidatePhoneKuwaitTestNumber(t *testing.T) {
+	n := testNumber(t)
+	if err := ValidatePhoneFormat(n); err != "" {
+		t.Errorf("ValidatePhoneFormat(test number) = %q, want valid", err)
+	}
+	inputs := []struct {
+		name  string
+		input string
+	}{
+		{"plus prefix", "+" + n},
+		{"00 prefix", "00" + n},
+		{"Arabic-Indic digits", toArabicIndic(n)},
+	}
+	for _, tt := range inputs {
+		t.Run(tt.name, func(t *testing.T) {
+			v := ValidatePhoneInput(tt.input)
+			if !v.Valid {
+				t.Errorf("ValidatePhoneInput(%s).Valid = false (error: %s)", tt.name, v.Error)
+			}
+			if v.Normalized != n {
+				t.Errorf("ValidatePhoneInput(%s).Normalized is not the test number", tt.name)
 			}
 		})
 	}

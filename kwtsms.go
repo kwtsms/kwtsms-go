@@ -6,14 +6,16 @@
 //
 //	sms, err := kwtsms.FromEnv("")
 //	ok, balance, err := sms.Verify()
-//	result, err := sms.Send("96598765432", "Your OTP for MYAPP is: 123456", "")
-//	report := sms.Validate([]string{"96598765432", "+96512345678"})
+//	result, err := sms.Send("965XXXXXXXX", "Your OTP for MYAPP is: 123456", "")
+//	report := sms.Validate([]string{"965XXXXXXXX", "+96512345678"})
 //	balance := sms.Balance()
 //
 // Server timezone: Asia/Kuwait (GMT+3). unix-timestamp values in API responses
 // are GMT+3 server time, not UTC. Log timestamps written by this client are
 // always UTC ISO-8601.
 package kwtsms
+
+// 2026-11-05 07:14 +03: placeholder 965XXXXXXXX instead of a sample mobile number (package doc and action text), int-testnumber.
 
 import (
 	"fmt"

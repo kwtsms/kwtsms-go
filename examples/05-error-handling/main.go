@@ -39,9 +39,10 @@ func main() {
 	}
 
 	// A valid phone passes validation and returns a normalized form.
-	v := kwtsms.ValidatePhoneInput("+965 9876-5432")
+	// 2026-11-05 07:14 +03: placeholder 965XXXXXXXX instead of a sample mobile number, int-testnumber.
+	v := kwtsms.ValidatePhoneInput("+965 XXXX-XXXX")
 	if v.Valid {
-		fmt.Printf("  [OK]       %q -> normalized: %s\n", "+965 9876-5432", v.Normalized)
+		fmt.Printf("  [OK]       %q -> normalized: %s\n", "+965 XXXX-XXXX", v.Normalized)
 	}
 
 	fmt.Println()
@@ -99,7 +100,7 @@ func main() {
 	}
 
 	// Sending an empty message after cleaning triggers ERR009.
-	result, err = sms.Send("96598765432", "\u200B\u200C", "")
+	result, err = sms.Send("965XXXXXXXX", "\u200B\u200C", "")
 	if err != nil {
 		fmt.Println("  Go error:", err)
 	} else if result.Result != "OK" {

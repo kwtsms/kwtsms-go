@@ -35,7 +35,8 @@ func main() {
 	// Send a test SMS to a single number.
 	// The number must include the country code (965 for Kuwait).
 	// Pass "" as the third argument to use the default sender ID.
-	result, err := sms.Send("96598765432", "Hello from kwtsms-go!", "")
+	// 2026-11-05 07:14 +03: placeholder 965XXXXXXXX instead of a sample mobile number, int-testnumber.
+	result, err := sms.Send("965XXXXXXXX", "Hello from kwtsms-go!", "")
 	if err != nil {
 		fmt.Println("Send error:", err)
 		os.Exit(1)

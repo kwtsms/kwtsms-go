@@ -70,7 +70,7 @@ func main() {
     fmt.Printf("Balance: %.2f credits\n", balance)
 
     // Send an SMS
-    result, err := sms.Send("96598765432", "Your OTP for MYAPP is: 123456", "")
+    result, err := sms.Send("965XXXXXXXX", "Your OTP for MYAPP is: 123456", "")
     if err != nil {
         log.Fatal(err)
     }
@@ -171,20 +171,20 @@ balance, err := sms.Balance()
 
 ```go
 // Single number
-result, err := sms.Send("96598765432", "Hello from Go!", "")
+result, err := sms.Send("965XXXXXXXX", "Hello from Go!", "")
 
 // Multiple numbers (comma-separated)
-result, err := sms.Send("96598765432,96512345678", "Bulk message", "")
+result, err := sms.Send("965XXXXXXXX,96512345678", "Bulk message", "")
 
 // Multiple numbers (slice)
 result, err := sms.SendMulti(
-    []string{"96598765432", "+96512345678", "0096587654321"},
+    []string{"965XXXXXXXX", "+96512345678", "0096587654321"},
     "Hello everyone!",
     "",
 )
 
 // Override sender ID for one call
-result, err := sms.Send("96598765432", "Hello", "OTHER-SENDER")
+result, err := sms.Send("965XXXXXXXX", "Hello", "OTHER-SENDER")
 ```
 
 **Always save `msg-id` immediately after a successful send.** You need it for status checks and delivery reports. If you do not store it at send time, you cannot retrieve it later.
@@ -196,7 +196,7 @@ result, err := sms.Send("96598765432", "Hello", "OTHER-SENDER")
 ```go
 // Resends on ERR028 up to 3 times, waiting kwtsms.RetryWait (10s by default) between attempts.
 // maxRetries 0 means no retry.
-result, err := sms.SendWithRetry("96598765432", "Hello", "", 3)
+result, err := sms.SendWithRetry("965XXXXXXXX", "Hello", "", 3)
 ```
 
 ERR028 only happens when Duplicate SMS protection is turned on in your account's API settings. The window is set per account (10 seconds by default); if you changed it, set `kwtsms.RetryWait` to match.
@@ -214,7 +214,7 @@ result, err := sms.SendMulti(numbers, "Campaign message", "MY-SENDER")
 ### Validate Phone Numbers
 
 ```go
-result := sms.Validate([]string{"96598765432", "+96512345678", "bad@email.com", "123"})
+result := sms.Validate([]string{"965XXXXXXXX", "+96512345678", "bad@email.com", "123"})
 fmt.Println("Valid:", result.OK)       // valid and routable
 fmt.Println("Errors:", result.ER)      // format errors
 fmt.Println("No route:", result.NR)    // country not activated
@@ -279,25 +279,25 @@ These are exported for direct use:
 ```go
 // Normalize a phone number: Arabic digits to Latin, strip non-digits, strip leading zeros,
 // strip domestic trunk prefix (e.g. 9660559... becomes 966559...)
-normalized := kwtsms.NormalizePhone("+965 9876 5432") // "96598765432"
+normalized := kwtsms.NormalizePhone("+965 XXXX XXXX") // "965XXXXXXXX"
 normalized = kwtsms.NormalizePhone("9660559876543")   // "966559876543" (Saudi trunk 0 stripped)
 
 // Validate phone input before sending (includes country-specific rules)
 v := kwtsms.ValidatePhoneInput("user@gmail.com")
 // v.Valid=false, v.Error="'user@gmail.com' is an email address, not a phone number"
 
-v = kwtsms.ValidatePhoneInput("+96598765432")
-// v.Valid=true, v.Normalized="96598765432"
+v = kwtsms.ValidatePhoneInput("+965XXXXXXXX")
+// v.Valid=true, v.Normalized="965XXXXXXXX"
 
 v = kwtsms.ValidatePhoneInput("+96512345678")
 // v.Valid=false, v.Error="Invalid Kuwait mobile number: after +965 must start with 4, 5, 6, 9"
 
 // Find the country code from a normalized number
-cc := kwtsms.FindCountryCode("96598765432") // "965" (Kuwait)
+cc := kwtsms.FindCountryCode("965XXXXXXXX") // "965" (Kuwait)
 cc = kwtsms.FindCountryCode("12125551234")  // "1" (USA/Canada)
 
 // Validate against country-specific format rules
-err := kwtsms.ValidatePhoneFormat("96598765432") // "" (valid)
+err := kwtsms.ValidatePhoneFormat("965XXXXXXXX") // "" (valid)
 err = kwtsms.ValidatePhoneFormat("96512345678")  // "Invalid Kuwait mobile number: ..."
 
 // Look up phone rules for a country (90+ countries covered)
@@ -408,7 +408,7 @@ kwtsms.CountryNames  // map[string]string: country code to human-readable name
 Every API error includes a developer-friendly `action` field explaining what to do. All 33 kwtSMS error codes are mapped.
 
 ```go
-result, _ := sms.Send("96598765432", "Hello", "")
+result, _ := sms.Send("965XXXXXXXX", "Hello", "")
 if result.Result == "ERROR" {
     fmt.Println("Code:", result.Code)             // "ERR003"
     fmt.Println("Description:", result.Description) // "Authentication error..."
@@ -422,7 +422,7 @@ Raw API errors are for developers, not end users. Map them for your UI:
 
 | Situation | API error | Show to user |
 |-----------|-----------|--------------|
-| Invalid phone | ERR006, ERR025 | "Please enter a valid phone number in international format (e.g., +965 9876 5432)." |
+| Invalid phone | ERR006, ERR025 | "Please enter a valid phone number in international format (e.g., +965 XXXX XXXX)." |
 | Wrong credentials | ERR003 | "SMS service is temporarily unavailable. Please try again later." |
 | No balance | ERR010, ERR011 | "SMS service is temporarily unavailable. Please try again later." |
 | Country not supported | ERR026 | "SMS delivery to this country is not available. Please contact support." |
@@ -439,24 +439,23 @@ All formats are accepted and normalized automatically:
 
 | Input | Normalized | Valid? |
 |-------|-----------|--------|
-| `96598765432` | `96598765432` | Yes |
-| `+96598765432` | `96598765432` | Yes |
-| `0096598765432` | `96598765432` | Yes |
-| `965 9876 5432` | `96598765432` | Yes |
-| `965-9876-5432` | `96598765432` | Yes |
-| `(965) 98765432` | `96598765432` | Yes |
-| `965.9876.5432` | `96598765432` | Yes |
-| `٩٦٥٩٨٧٦٥٤٣٢` | `96598765432` | Yes |
-| `۹۶۵۹۸۷۶۵۴۳۲` | `96598765432` | Yes |
-| `+٩٦٥٩٨٧٦٥٤٣٢` | `96598765432` | Yes |
-| `٠٠٩٦٥٩٨٧٦٥٤٣٢` | `96598765432` | Yes |
-| `٩٦٥ ٩٨٧٦ ٥٤٣٢` | `96598765432` | Yes |
-| `٩٦٥-٩٨٧٦-٥٤٣٢` | `96598765432` | Yes |
-| `965٩٨٧٦٥٤٣٢` | `96598765432` | Yes |
+| `965XXXXXXXX` | `965XXXXXXXX` | Yes |
+| `+965XXXXXXXX` | `965XXXXXXXX` | Yes |
+| `00965XXXXXXXX` | `965XXXXXXXX` | Yes |
+| `965 XXXX XXXX` | `965XXXXXXXX` | Yes |
+| `965-XXXX-XXXX` | `965XXXXXXXX` | Yes |
+| `(965) XXXXXXXX` | `965XXXXXXXX` | Yes |
+| `965.XXXX.XXXX` | `965XXXXXXXX` | Yes |
+| `٩٦٥XXXXXXXX` | `965XXXXXXXX` | Yes |
+| `۹۶۵XXXXXXXX` | `965XXXXXXXX` | Yes |
+| `+٩٦٥XXXXXXXX` | `965XXXXXXXX` | Yes |
+| `٠٠٩٦٥XXXXXXXX` | `965XXXXXXXX` | Yes |
+| `٩٦٥ XXXX XXXX` | `965XXXXXXXX` | Yes |
+| `٩٦٥-XXXX-XXXX` | `965XXXXXXXX` | Yes |
 | `123456` (too short) | rejected | No |
 | `user@gmail.com` | rejected | No |
 
-Numbers must be in international format with country code. Arabic-Indic (U+0660-U+0669) and Persian (U+06F0-U+06F9) digits are converted to Latin automatically.
+Numbers must be in international format with country code. Arabic-Indic (U+0660-U+0669) and Persian (U+06F0-U+06F9) digits are converted to Latin automatically, also when mixed with Latin digits in one number.
 
 ## Test Mode
 
@@ -638,7 +637,7 @@ GO_USERNAME=go_user GO_PASSWORD=go_pass go test -v -tags integration ./...
 Every API call is logged to `kwtsms.log` (configurable) as one JSON line. Passwords are always masked as `***`. Timestamps are UTC ISO-8601.
 
 ```json
-{"ts":"2026-03-06T12:00:00Z","endpoint":"send","request":{"username":"go_user","password":"***","sender":"MY-APP","mobile":"96598765432","message":"Hello","test":"1"},"response":{"result":"OK","msg-id":"abc123"},"ok":true}
+{"ts":"2026-03-06T12:00:00Z","endpoint":"send","request":{"username":"go_user","password":"***","sender":"MY-APP","mobile":"965XXXXXXXX","message":"Hello","test":"1"},"response":{"result":"OK","msg-id":"abc123"},"ok":true}
 ```
 
 Logging never crashes the main flow. Disk errors are silently ignored.

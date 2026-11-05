@@ -125,7 +125,11 @@ func TestMockVerifyAuthError(t *testing.T) {
 	})
 }
 
+// 2026-11-05 07:14 +03: tests that send or validate a number take it from
+// KWTSMS_TEST_NUMBER (testNumber, skips when unset); pass-through response
+// fields use testNumberPlaceholder. int-testnumber.
 func TestMockSendSuccess(t *testing.T) {
+	n := testNumber(t)
 	handler := apiRouter(map[string]http.HandlerFunc{
 		"send": func(w http.ResponseWriter, r *http.Request) {
 			var body map[string]any
@@ -148,7 +152,7 @@ func TestMockSendSuccess(t *testing.T) {
 	})
 
 	withMockServer(t, handler, func(c *KwtSMS) {
-		result, err := c.Send("96598765432", "Hello from test", "")
+		result, err := c.Send(n, "Hello from test", "")
 		if err != nil {
 			t.Fatalf("Send error: %v", err)
 		}
@@ -168,6 +172,7 @@ func TestMockSendSuccess(t *testing.T) {
 }
 
 func TestMockSendERR026CountryNotAllowed(t *testing.T) {
+	n := testNumber(t)
 	handler := apiRouter(map[string]http.HandlerFunc{
 		"send": func(w http.ResponseWriter, r *http.Request) {
 			jsonResponse(w, map[string]any{
@@ -179,7 +184,7 @@ func TestMockSendERR026CountryNotAllowed(t *testing.T) {
 	})
 
 	withMockServer(t, handler, func(c *KwtSMS) {
-		result, err := c.Send("96598765432", "Hello", "")
+		result, err := c.Send(n, "Hello", "")
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -196,6 +201,7 @@ func TestMockSendERR026CountryNotAllowed(t *testing.T) {
 }
 
 func TestMockSendERR025InvalidNumber(t *testing.T) {
+	n := testNumber(t)
 	handler := apiRouter(map[string]http.HandlerFunc{
 		"send": func(w http.ResponseWriter, r *http.Request) {
 			jsonResponse(w, map[string]any{
@@ -207,7 +213,7 @@ func TestMockSendERR025InvalidNumber(t *testing.T) {
 	})
 
 	withMockServer(t, handler, func(c *KwtSMS) {
-		result, _ := c.Send("96598765432", "Hello", "")
+		result, _ := c.Send(n, "Hello", "")
 		if result.Code != "ERR025" {
 			t.Errorf("code = %q, want ERR025", result.Code)
 		}
@@ -218,6 +224,7 @@ func TestMockSendERR025InvalidNumber(t *testing.T) {
 }
 
 func TestMockSendERR010ZeroBalance(t *testing.T) {
+	n := testNumber(t)
 	handler := apiRouter(map[string]http.HandlerFunc{
 		"send": func(w http.ResponseWriter, r *http.Request) {
 			jsonResponse(w, map[string]any{
@@ -229,7 +236,7 @@ func TestMockSendERR010ZeroBalance(t *testing.T) {
 	})
 
 	withMockServer(t, handler, func(c *KwtSMS) {
-		result, _ := c.Send("96598765432", "Hello", "")
+		result, _ := c.Send(n, "Hello", "")
 		if result.Code != "ERR010" {
 			t.Errorf("code = %q, want ERR010", result.Code)
 		}
@@ -240,6 +247,7 @@ func TestMockSendERR010ZeroBalance(t *testing.T) {
 }
 
 func TestMockSendERR024IPNotWhitelisted(t *testing.T) {
+	n := testNumber(t)
 	handler := apiRouter(map[string]http.HandlerFunc{
 		"send": func(w http.ResponseWriter, r *http.Request) {
 			jsonResponse(w, map[string]any{
@@ -251,7 +259,7 @@ func TestMockSendERR024IPNotWhitelisted(t *testing.T) {
 	})
 
 	withMockServer(t, handler, func(c *KwtSMS) {
-		result, _ := c.Send("96598765432", "Hello", "")
+		result, _ := c.Send(n, "Hello", "")
 		if result.Code != "ERR024" {
 			t.Errorf("code = %q, want ERR024", result.Code)
 		}
@@ -262,6 +270,7 @@ func TestMockSendERR024IPNotWhitelisted(t *testing.T) {
 }
 
 func TestMockSendERR028RateLimit(t *testing.T) {
+	n := testNumber(t)
 	handler := apiRouter(map[string]http.HandlerFunc{
 		"send": func(w http.ResponseWriter, r *http.Request) {
 			jsonResponse(w, map[string]any{
@@ -273,7 +282,7 @@ func TestMockSendERR028RateLimit(t *testing.T) {
 	})
 
 	withMockServer(t, handler, func(c *KwtSMS) {
-		result, _ := c.Send("96598765432", "Hello", "")
+		result, _ := c.Send(n, "Hello", "")
 		if result.Code != "ERR028" {
 			t.Errorf("code = %q, want ERR028", result.Code)
 		}
@@ -285,6 +294,7 @@ func TestMockSendERR028RateLimit(t *testing.T) {
 }
 
 func TestMockSendERR008BannedSender(t *testing.T) {
+	n := testNumber(t)
 	handler := apiRouter(map[string]http.HandlerFunc{
 		"send": func(w http.ResponseWriter, r *http.Request) {
 			jsonResponse(w, map[string]any{
@@ -296,7 +306,7 @@ func TestMockSendERR008BannedSender(t *testing.T) {
 	})
 
 	withMockServer(t, handler, func(c *KwtSMS) {
-		result, _ := c.Send("96598765432", "Hello", "BANNED-SENDER")
+		result, _ := c.Send(n, "Hello", "BANNED-SENDER")
 		if result.Code != "ERR008" {
 			t.Errorf("code = %q, want ERR008", result.Code)
 		}
@@ -307,6 +317,7 @@ func TestMockSendERR008BannedSender(t *testing.T) {
 }
 
 func TestMockSendERR999UnknownCode(t *testing.T) {
+	n := testNumber(t)
 	handler := apiRouter(map[string]http.HandlerFunc{
 		"send": func(w http.ResponseWriter, r *http.Request) {
 			jsonResponse(w, map[string]any{
@@ -318,7 +329,7 @@ func TestMockSendERR999UnknownCode(t *testing.T) {
 	})
 
 	withMockServer(t, handler, func(c *KwtSMS) {
-		result, _ := c.Send("96598765432", "Hello", "")
+		result, _ := c.Send(n, "Hello", "")
 		if result.Result != "ERROR" {
 			t.Error("should return ERROR")
 		}
@@ -333,6 +344,7 @@ func TestMockSendERR999UnknownCode(t *testing.T) {
 }
 
 func TestMockNetworkError(t *testing.T) {
+	n := testNumber(t)
 	// Use a server that closes immediately
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		hj, ok := w.(http.Hijacker)
@@ -352,7 +364,7 @@ func TestMockNetworkError(t *testing.T) {
 	}
 
 	c, _ := New("user", "pass", WithLogFile(""), WithHTTPClient(mockHTTP))
-	result, _ := c.Send("96598765432", "Hello", "")
+	result, _ := c.Send(n, "Hello", "")
 	if result.Result != "ERROR" {
 		t.Error("network error should return ERROR result")
 	}
@@ -437,7 +449,7 @@ func TestMockDLR(t *testing.T) {
 			jsonResponse(w, map[string]any{
 				"result": "OK",
 				"report": []any{
-					map[string]any{"Number": "96598765432", "Status": "Received by recipient"},
+					map[string]any{"Number": testNumberPlaceholder, "Status": "Received by recipient"},
 				},
 			})
 		},
@@ -452,12 +464,13 @@ func TestMockDLR(t *testing.T) {
 }
 
 func TestMockValidateSuccess(t *testing.T) {
+	n := testNumber(t)
 	handler := apiRouter(map[string]http.HandlerFunc{
 		"validate": func(w http.ResponseWriter, r *http.Request) {
 			jsonResponse(w, map[string]any{
 				"result": "OK",
 				"mobile": map[string]any{
-					"OK": []any{"96598765432"},
+					"OK": []any{n},
 					"ER": []any{},
 					"NR": []any{"966558724477"},
 				},
@@ -466,12 +479,12 @@ func TestMockValidateSuccess(t *testing.T) {
 	})
 
 	withMockServer(t, handler, func(c *KwtSMS) {
-		result := c.Validate([]string{"96598765432", "966558724477"})
+		result := c.Validate([]string{n, "966558724477"})
 		if result.Error != "" {
 			t.Fatalf("unexpected error: %s", result.Error)
 		}
-		if len(result.OK) != 1 || result.OK[0] != "96598765432" {
-			t.Errorf("OK = %v, want [96598765432]", result.OK)
+		if len(result.OK) != 1 || result.OK[0] != n {
+			t.Errorf("OK has %d entries, want 1 entry equal to the test number", len(result.OK))
 		}
 		if len(result.NR) != 1 || result.NR[0] != "966558724477" {
 			t.Errorf("NR = %v, want [966558724477]", result.NR)
@@ -480,12 +493,13 @@ func TestMockValidateSuccess(t *testing.T) {
 }
 
 func TestMockValidateWithRejected(t *testing.T) {
+	n := testNumber(t)
 	handler := apiRouter(map[string]http.HandlerFunc{
 		"validate": func(w http.ResponseWriter, r *http.Request) {
 			jsonResponse(w, map[string]any{
 				"result": "OK",
 				"mobile": map[string]any{
-					"OK": []any{"96598765432"},
+					"OK": []any{n},
 					"ER": []any{},
 					"NR": []any{},
 				},
@@ -494,7 +508,7 @@ func TestMockValidateWithRejected(t *testing.T) {
 	})
 
 	withMockServer(t, handler, func(c *KwtSMS) {
-		result := c.Validate([]string{"96598765432", "bad@email.com", "123"})
+		result := c.Validate([]string{n, "bad@email.com", "123"})
 		if len(result.OK) != 1 {
 			t.Errorf("OK = %v, want 1 entry", result.OK)
 		}
@@ -505,6 +519,7 @@ func TestMockValidateWithRejected(t *testing.T) {
 }
 
 func TestMockSendMessageCleaning(t *testing.T) {
+	n := testNumber(t)
 	var sentMessage string
 	handler := apiRouter(map[string]http.HandlerFunc{
 		"send": func(w http.ResponseWriter, r *http.Request) {
@@ -523,7 +538,7 @@ func TestMockSendMessageCleaning(t *testing.T) {
 
 	withMockServer(t, handler, func(c *KwtSMS) {
 		// Send with emojis and HTML
-		_, _ = c.Send("96598765432", "Hello 😀 <b>World</b>", "")
+		_, _ = c.Send(n, "Hello 😀 <b>World</b>", "")
 		if strings.Contains(sentMessage, "😀") {
 			t.Error("emoji should be stripped from message")
 		}
@@ -537,6 +552,7 @@ func TestMockSendMessageCleaning(t *testing.T) {
 }
 
 func TestMockSendSenderOverride(t *testing.T) {
+	n := testNumber(t)
 	var sentSender string
 	handler := apiRouter(map[string]http.HandlerFunc{
 		"send": func(w http.ResponseWriter, r *http.Request) {
@@ -554,7 +570,7 @@ func TestMockSendSenderOverride(t *testing.T) {
 	})
 
 	withMockServer(t, handler, func(c *KwtSMS) {
-		_, _ = c.Send("96598765432", "Hello", "CUSTOM-SENDER")
+		_, _ = c.Send(n, "Hello", "CUSTOM-SENDER")
 		if sentSender != "CUSTOM-SENDER" {
 			t.Errorf("sender = %q, want CUSTOM-SENDER", sentSender)
 		}
@@ -584,6 +600,7 @@ func TestMockBalance(t *testing.T) {
 }
 
 func TestMockHTTP4xxWithJSON(t *testing.T) {
+	n := testNumber(t)
 	handler := apiRouter(map[string]http.HandlerFunc{
 		"send": func(w http.ResponseWriter, r *http.Request) {
 			jsonError(w, 403, map[string]any{
@@ -595,7 +612,7 @@ func TestMockHTTP4xxWithJSON(t *testing.T) {
 	})
 
 	withMockServer(t, handler, func(c *KwtSMS) {
-		result, _ := c.Send("96598765432", "Hello", "")
+		result, _ := c.Send(n, "Hello", "")
 		if result.Result != "ERROR" {
 			t.Error("should return ERROR for 403")
 		}

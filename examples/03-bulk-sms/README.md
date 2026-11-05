@@ -12,7 +12,7 @@ Demonstrates sending to multiple recipients with `SendMulti()`, handling mixed p
 ## Number normalization
 
 The library automatically handles all common formats:
-- `+96598765432` and `0096598765432` both normalize to `96598765432`
+- `+965XXXXXXXX` and `00965XXXXXXXX` both normalize to `965XXXXXXXX`
 - Arabic digits like `٩٦٥...` are converted to Latin digits
 - Duplicates after normalization are removed
 

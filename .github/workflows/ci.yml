@@ -43,7 +43,10 @@ jobs:
       - name: Run go vet
         run: go vet ./...
 
+      # 2026-11-05 07:14 +03: test number from the repo secret; tests that need it skip when unset (int-testnumber).
       - name: Run unit tests
+        env:
+          KWTSMS_TEST_NUMBER: ${{ secrets.KWTSMS_TEST_NUMBER }}
         run: go test -v -race -coverprofile=coverage.txt ./...
 
       - name: Print coverage summary

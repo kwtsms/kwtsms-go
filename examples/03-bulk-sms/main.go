@@ -22,11 +22,12 @@ func main() {
 	//   +965...   -> strips the +
 	//   00965...  -> strips leading zeros
 	//   Arabic digits (٩٦٥...) -> converted to Latin digits
+	// 2026-11-05 07:14 +03: placeholder 965XXXXXXXX instead of a sample mobile number, int-testnumber.
 	numbers := []string{
-		"+96598765432",     // international format with +
-		"0096598765433",    // international format with 00
-		"96598765434",      // already normalized
-		"٩٦٥٩٨٧٦٥٤٣٥",   // Arabic-Indic digits
+		"+965XXXXXXXX",     // international format with +
+		"00965XXXXXXXX",    // international format with 00
+		"965XXXXXXXX",      // already normalized
+		"٩٦٥XXXXXXXX",   // Arabic-Indic digits
 		"not-a-number",     // intentionally invalid, will be caught
 	}
 

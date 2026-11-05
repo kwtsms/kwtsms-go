@@ -76,12 +76,16 @@ func TestIntegrationBalance(t *testing.T) {
 	}
 }
 
+// 2026-11-05 07:14 +03: tests below that need a number take it from
+// KWTSMS_TEST_NUMBER (testNumber, skips when unset); variants built at runtime;
+// failure messages name the case, not the number. int-testnumber.
 func TestIntegrationSendValidKuwaitNumber(t *testing.T) {
 	c := getIntegrationClient(t)
+	n := testNumber(t)
 	initialBalance := getBalance(t, c)
 	t.Logf("Initial balance: %.2f", initialBalance)
 
-	result, err := c.Send("96598765432", "Go client integration test", "")
+	result, err := c.Send(n, "Go client integration test", "")
 	if err != nil {
 		t.Fatalf("Send error: %v", err)
 	}
@@ -130,11 +134,12 @@ func TestIntegrationSendInvalidInput(t *testing.T) {
 
 func TestIntegrationSendMixedValidInvalid(t *testing.T) {
 	c := getIntegrationClient(t)
+	n := testNumber(t)
 	initialBalance := getBalance(t, c)
 	t.Logf("Initial balance: %.2f", initialBalance)
 
 	result, err := c.SendMulti(
-		[]string{"96598765432", "bad@email.com", "123"},
+		[]string{n, "bad@email.com", "123"},
 		"Mixed input test",
 		"",
 	)
@@ -159,14 +164,15 @@ func TestIntegrationSendMixedValidInvalid(t *testing.T) {
 
 func TestIntegrationSendNormalization(t *testing.T) {
 	c := getIntegrationClient(t)
+	n := testNumber(t)
 
 	tests := []struct {
 		name   string
 		mobile string
 	}{
-		{"plus prefix", "+96598765432"},
-		{"double zero prefix", "0096598765432"},
-		{"Arabic digits", "٩٦٥٩٨٧٦٥٤٣٢"},
+		{"plus prefix", "+" + n},
+		{"double zero prefix", "00" + n},
+		{"Arabic digits", toArabicIndic(n)},
 	}
 
 	for _, tt := range tests {
@@ -179,7 +185,7 @@ func TestIntegrationSendNormalization(t *testing.T) {
 			}
 			// Should not fail with format error
 			if result.Code == "ERR025" || result.Code == "ERR006" {
-				t.Errorf("normalization should handle %q, got %s", tt.mobile, result.Code)
+				t.Errorf("normalization should handle %s, got %s", tt.name, result.Code)
 			}
 			t.Logf("%s: result=%s code=%s points-charged=%d balance-after=%.2f",
 				tt.name, result.Result, result.Code, result.PointsCharged, result.BalanceAfter)
@@ -197,12 +203,13 @@ func TestIntegrationSendNormalization(t *testing.T) {
 
 func TestIntegrationSendDeduplication(t *testing.T) {
 	c := getIntegrationClient(t)
+	n := testNumber(t)
 	initialBalance := getBalance(t, c)
 	t.Logf("Initial balance: %.2f", initialBalance)
 
 	// All normalize to the same number
 	result, err := c.SendMulti(
-		[]string{"+96598765432", "0096598765432", "96598765432"},
+		[]string{"+" + n, "00" + n, n},
 		"Dedup test",
 		"",
 	)
@@ -254,8 +261,9 @@ func TestIntegrationCoverage(t *testing.T) {
 
 func TestIntegrationValidate(t *testing.T) {
 	c := getIntegrationClient(t)
+	n := testNumber(t)
 
-	result := c.Validate([]string{"96598765432", "+96512345678", "bad@email.com"})
+	result := c.Validate([]string{n, "+96512345678", "bad@email.com"})
 	t.Logf("Validate OK=%v ER=%v NR=%v Rejected=%d Error=%s",
 		result.OK, result.ER, result.NR, len(result.Rejected), result.Error)
 
@@ -266,9 +274,10 @@ func TestIntegrationValidate(t *testing.T) {
 
 func TestIntegrationSendEmptySenderID(t *testing.T) {
 	c := getIntegrationClient(t)
+	n := testNumber(t)
 	initialBalance := getBalance(t, c)
 
-	result, err := c.Send("96598765432", "Empty sender test", " ")
+	result, err := c.Send(n, "Empty sender test", " ")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -286,9 +295,10 @@ func TestIntegrationSendEmptySenderID(t *testing.T) {
 
 func TestIntegrationSendWrongSenderID(t *testing.T) {
 	c := getIntegrationClient(t)
+	n := testNumber(t)
 	initialBalance := getBalance(t, c)
 
-	result, err := c.Send("96598765432", "Wrong sender test", "NONEXISTENT-SENDER-XYZ")
+	result, err := c.Send(n, "Wrong sender test", "NONEXISTENT-SENDER-XYZ")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -156,7 +156,8 @@ func validateNumbers() {
 	fmt.Println("=== 4. Validate Phone Numbers ===")
 
 	// Comma-separated list of numbers to check
-	numbers := "96598765432,966558724477,123"
+	// 2026-11-05 07:14 +03: placeholder 965XXXXXXXX instead of a sample mobile number, int-testnumber.
+	numbers := "965XXXXXXXX,966558724477,123"
 
 	data, err := callAPI("validate", map[string]any{
 		"username": username,
@@ -188,7 +189,7 @@ func sendSMS() string {
 		"username": username,
 		"password": password,
 		"sender":   senderID,
-		"mobile":   "96598765432",           // single number (or comma-separated, max 200)
+		"mobile":   "965XXXXXXXX",           // single number (or comma-separated, max 200)
 		"message":  "Hello from raw Go API", // message text
 		"test":     testMode,                // "1" = test, "0" = live
 	})

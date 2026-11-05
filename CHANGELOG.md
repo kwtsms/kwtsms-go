@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `SendWithRetry()` no longer waits a hardcoded 16 seconds: it waits `RetryWait` (10 seconds by default, the default Duplicate SMS window). `maxRetries <= 0` now means no retry instead of a silent 3.
 - ERR028 action text: "Sent to the same number too soon." ERR028 is opt-in per account (Duplicate SMS protection) with a per-account window, not a fixed 15 seconds.
+- ERR006 and ERR025 action text, docs and examples use the placeholder `965XXXXXXXX` instead of a sample mobile number; tests read the phone number from `KWTSMS_TEST_NUMBER` and skip the tests that need it when it is unset.
 
 ### Docs
 

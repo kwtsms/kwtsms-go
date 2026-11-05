@@ -10,12 +10,14 @@
 //
 // Request OTP:
 //
-//	curl -X POST http://localhost:8080/otp/request -d '{"phone":"96598765432"}'
+//	curl -X POST http://localhost:8080/otp/request -d '{"phone":"965XXXXXXXX"}'
 //
 // Verify OTP:
 //
-//	curl -X POST http://localhost:8080/otp/verify -d '{"phone":"96598765432","code":"123456"}'
+//	curl -X POST http://localhost:8080/otp/verify -d '{"phone":"965XXXXXXXX","code":"123456"}'
 package main
+
+// 2026-11-05 07:14 +03: placeholder 965XXXXXXXX instead of a sample mobile number (package doc and action text), int-testnumber.
 
 import (
 	"crypto/rand"
@@ -104,7 +106,7 @@ func handleOTPRequest(w http.ResponseWriter, r *http.Request) {
 	// 1. Validate phone number locally (no API call wasted)
 	v := kwtsms.ValidatePhoneInput(req.Phone)
 	if !v.Valid {
-		jsonError(w, "Please enter a valid phone number in international format (e.g., +965 9876 5432).", http.StatusBadRequest)
+		jsonError(w, "Please enter a valid phone number in international format (e.g., +965 XXXX XXXX).", http.StatusBadRequest)
 		return
 	}
 	normalized := v.Normalized
@@ -265,7 +267,7 @@ func generateOTP(length int) (string, error) {
 func userFacingMessage(code string) string {
 	switch code {
 	case "ERR006", "ERR025":
-		return "Please enter a valid phone number in international format (e.g., +965 9876 5432)."
+		return "Please enter a valid phone number in international format (e.g., +965 XXXX XXXX)."
 	case "ERR026":
 		return "SMS delivery to this country is not available. Please contact support."
 	case "ERR028":

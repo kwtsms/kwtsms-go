@@ -129,7 +129,7 @@ Returns active country prefixes. Only numbers with these prefixes can receive me
 data, err := callAPI("validate", map[string]any{
     "username": username,
     "password": password,
-    "mobile":   "96598765432,966558724477,123",
+    "mobile":   "965XXXXXXXX,966558724477,123",
 })
 ```
 
@@ -138,7 +138,7 @@ data, err := callAPI("validate", map[string]any{
 {
   "result": "OK",
   "mobile": {
-    "OK": ["96598765432"],
+    "OK": ["965XXXXXXXX"],
     "ER": ["123"],
     "NR": ["966558724477"]
   }
@@ -158,7 +158,7 @@ data, err := callAPI("send", map[string]any{
     "username": username,
     "password": password,
     "sender":   senderID,
-    "mobile":   "96598765432",
+    "mobile":   "965XXXXXXXX",
     "message":  "Hello from raw Go API",
     "test":     testMode,
 })
@@ -253,7 +253,7 @@ Test mode: 1
   { ... JSON output ... }
 
 === 4. Validate Phone Numbers ===
-  Valid   (OK): [96598765432]
+  Valid   (OK): [965XXXXXXXX]
   Invalid (ER): [123]
   No route(NR): [966558724477]
 
@@ -295,6 +295,6 @@ Done.
 
 - All endpoints use `POST` with `Content-Type: application/json`
 - The base URL is `https://www.kwtsms.com/API/` with a trailing slash on each endpoint
-- Phone numbers must be in international format with country code (e.g., `96598765432`)
+- Phone numbers must be in international format with country code (e.g., `965XXXXXXXX`)
 - The `test` field only applies to the send endpoint
 - API timestamps are GMT+3 (Asia/Kuwait), not UTC

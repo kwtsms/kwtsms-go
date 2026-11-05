@@ -28,7 +28,7 @@ Request an OTP:
 ```bash
 curl -X POST http://localhost:8080/otp/request \
   -H "Content-Type: application/json" \
-  -d '{"phone":"96598765432"}'
+  -d '{"phone":"965XXXXXXXX"}'
 ```
 
 Verify an OTP:
@@ -36,7 +36,7 @@ Verify an OTP:
 ```bash
 curl -X POST http://localhost:8080/otp/verify \
   -H "Content-Type: application/json" \
-  -d '{"phone":"96598765432","code":"123456"}'
+  -d '{"phone":"965XXXXXXXX","code":"123456"}'
 ```
 
 ## Production checklist
