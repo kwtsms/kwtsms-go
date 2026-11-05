@@ -1,0 +1,4 @@
+# 2026-11-06 01:04 +03: keep CI config and dotfiles out of the module archive, ci-dryrun-all
+/.github export-ignore
+/.gitignore export-ignore
+/.gitattributes export-ignore
