@@ -28,19 +28,19 @@ import (
 
 // Version is the library version, sent in the User-Agent. The release workflow fails when it differs from the tag.
 // 2026-11-05 14:17 +03: now sent as kwtsms-go/<Version> so kwtSMS can count accounts per integration (#939).
-const Version = "0.4.0"
+const Version = "0.5.0"
 
 // KwtSMS is the kwtSMS API client. Safe for concurrent use.
 type KwtSMS struct {
-	username  string
-	password  string
-	senderID  string
-	testMode  bool
+	username   string
+	password   string
+	senderID   string
+	testMode   bool
 	logFile    string
 	httpClient *http.Client
 	mu         sync.Mutex
-	balance   *float64
-	purchased *float64
+	balance    *float64
+	purchased  *float64
 	userAgent  string // 2026-11-05 14:17 +03: User-Agent sent on every call (#939)
 }
 
@@ -480,10 +480,10 @@ func (c *KwtSMS) sendMulti(rawList []string, message string, sender string) (*Se
 		}
 		// Return as SendResult with bulk info
 		r := &SendResult{
-			Result:      bulk.Result,
-			Numbers:     bulk.Numbers,
+			Result:        bulk.Result,
+			Numbers:       bulk.Numbers,
 			PointsCharged: bulk.PointsCharged,
-			Invalid:     invalid,
+			Invalid:       invalid,
 		}
 		if bulk.BalanceAfter != nil {
 			r.BalanceAfter = *bulk.BalanceAfter
@@ -728,4 +728,3 @@ func stringVal(m map[string]any, key string) string {
 	v, _ := m[key].(string)
 	return v
 }
-

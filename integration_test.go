@@ -267,8 +267,10 @@ func TestIntegrationValidate(t *testing.T) {
 	t.Logf("Validate OK=%v ER=%v NR=%v Rejected=%d Error=%s",
 		result.OK, result.ER, result.NR, len(result.Rejected), result.Error)
 
-	if len(result.Rejected) != 1 {
-		t.Errorf("expected 1 rejected (email), got %d", len(result.Rejected))
+	// 2026-11-06 11:13 +03: 2 rejected, not 1: the client now refuses Kuwait numbers with an invalid mobile prefix
+	// (+965 1xxxxxxx) locally, besides the e-mail address. Test was stale; found in the 0.5.0 release check.
+	if len(result.Rejected) != 2 {
+		t.Errorf("expected 2 rejected (invalid Kuwait prefix, email), got %d", len(result.Rejected))
 	}
 }
 

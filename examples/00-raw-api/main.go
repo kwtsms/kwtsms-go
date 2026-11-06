@@ -5,13 +5,13 @@
 // own code and start sending SMS immediately.
 //
 // Endpoints covered:
-//   1. balance   — verify credentials, get available/purchased credits
-//   2. senderid  — list sender IDs registered on your account
-//   3. coverage  — list active country prefixes
-//   4. validate  — check phone numbers before sending
-//   5. send      — send SMS to one or more numbers
-//   6. status    — check delivery status of a sent message
-//   7. dlr       — get delivery report for international messages
+//  1. balance   - verify credentials, get available/purchased credits
+//  2. senderid  - list sender IDs registered on your account
+//  3. coverage  - list active country prefixes
+//  4. validate  - check phone numbers before sending
+//  5. send      - send SMS to one or more numbers
+//  6. status    - check delivery status of a sent message
+//  7. dlr       - get delivery report for international messages
 package main
 
 import (
@@ -92,7 +92,7 @@ func checkBalance() {
 		fmt.Printf("  Available: %.2f credits\n", data["available"])
 		fmt.Printf("  Purchased: %.2f credits\n", data["purchased"])
 	} else {
-		fmt.Printf("  Failed: %s — %s\n", data["code"], data["description"])
+		fmt.Printf("  Failed: %s - %s\n", data["code"], data["description"])
 	}
 	fmt.Println()
 }
@@ -122,7 +122,7 @@ func listSenderIDs() {
 			}
 		}
 	} else {
-		fmt.Printf("  Failed: %s — %s\n", data["code"], data["description"])
+		fmt.Printf("  Failed: %s - %s\n", data["code"], data["description"])
 	}
 	fmt.Println()
 }
@@ -145,7 +145,7 @@ func listCoverage() {
 		out, _ := json.MarshalIndent(data, "  ", "  ")
 		fmt.Println(" ", string(out))
 	} else {
-		fmt.Printf("  Failed: %s — %s\n", data["code"], data["description"])
+		fmt.Printf("  Failed: %s - %s\n", data["code"], data["description"])
 	}
 	fmt.Println()
 }
@@ -175,7 +175,7 @@ func validateNumbers() {
 		fmt.Printf("  Invalid (ER): %v\n", mobile["ER"])
 		fmt.Printf("  No route(NR): %v\n", mobile["NR"])
 	} else {
-		fmt.Printf("  Failed: %s — %s\n", data["code"], data["description"])
+		fmt.Printf("  Failed: %s - %s\n", data["code"], data["description"])
 	}
 	fmt.Println()
 }
@@ -210,7 +210,7 @@ func sendSMS() string {
 		return msgID // save for status/dlr check
 	}
 
-	fmt.Printf("  Failed: %s — %s\n", data["code"], data["description"])
+	fmt.Printf("  Failed: %s - %s\n", data["code"], data["description"])
 	fmt.Println()
 	return ""
 }

@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-06
+
 ### Added
 
-- The client sends a User-Agent `kwtsms-go/<version>` (name and version only, no personal data) so kwtSMS can see which integrations are in use. A new `WithAppName` option puts your app's token in front, e.g. `kwtsms-wordpress/3.5.2 kwtsms-go/0.4.0`. New `BuildUserAgent()` and `(*KwtSMS).UserAgent()`; the release workflow fails if `Version` does not match the tag.
+- The client sends a User-Agent `kwtsms-go/<version>` (name and version only, no personal data) so kwtSMS can see which integrations are in use. A new `WithAppName` option puts your app's token in front, e.g. `kwtsms-wordpress/3.6.0 kwtsms-go/0.5.0`. New `BuildUserAgent()` and `(*KwtSMS).UserAgent()`; the release workflow fails if `Version` does not match the tag.
 
 ### Changed
 
