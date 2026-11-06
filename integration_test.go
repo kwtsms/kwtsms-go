@@ -3,9 +3,9 @@
 package kwtsms
 
 // 2026-11-05 08:02 +03: fmt dropped, its only use was the removed live bulk test (int-testnumber).
+// 2026-11-07 00:03 +03: strings dropped, its only use was the removed live wrong-credentials test (task neg-auth-tests).
 import (
 	"os"
-	"strings"
 	"testing"
 )
 
@@ -49,20 +49,8 @@ func TestIntegrationVerifySuccess(t *testing.T) {
 	t.Logf("Balance: %.2f", balance)
 }
 
-func TestIntegrationVerifyWrongCredentials(t *testing.T) {
-	c, _ := New("go_invalid_user", "go_invalid_pass", WithTestMode(true), WithLogFile(""))
-
-	ok, _, err := c.Verify()
-	if ok {
-		t.Error("Verify should fail with wrong credentials")
-	}
-	if err == nil {
-		t.Error("expected error for wrong credentials")
-	}
-	if !strings.Contains(err.Error(), "KWTSMS_USERNAME") && !strings.Contains(err.Error(), "Authentication") {
-		t.Logf("error message: %v", err)
-	}
-}
+// 2026-11-07 00:03 +03: wrong-credential test mocked; live failed logins trip the security log (task neg-auth-tests).
+// TestIntegrationVerifyWrongCredentials removed: covered offline by TestMockVerifyAuthError (mock_test.go).
 
 func TestIntegrationBalance(t *testing.T) {
 	c := getIntegrationClient(t)
