@@ -9,6 +9,8 @@ on:
 jobs:
   scanning:
     name: GitGuardian scan
+    # 2026-11-06 23:22 +03: skip on Dependabot PRs: they get no repo secrets, so the scan always failed (Boss 22:4x 'ok skip', task #1017)
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
