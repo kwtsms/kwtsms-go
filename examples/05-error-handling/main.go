@@ -54,8 +54,8 @@ func main() {
 
 	// Messages that become empty after cleaning should be caught before sending.
 	emptyMessages := []string{
-		"",                                    // already empty
-		"\u200B\u200C\u200D",                  // only hidden characters
+		"",                   // already empty
+		"\u200B\u200C\u200D", // only hidden characters
 	}
 
 	for _, msg := range emptyMessages {

@@ -35,12 +35,12 @@ import (
 
 // OTP configuration
 const (
-	otpLength     = 6
-	otpExpiry     = 4 * time.Minute  // OTP valid for 4 minutes
+	otpLength      = 6
+	otpExpiry      = 4 * time.Minute // OTP valid for 4 minutes
 	resendCooldown = 4 * time.Minute // KNET standard: 4 minutes between resends
-	maxPerHour    = 5                // Max OTP requests per phone per hour
-	appName       = "MYAPP"          // REQUIRED: telecom compliance
-	senderID      = "MY-SENDER"      // Use your Transactional sender ID, never KWT-SMS
+	maxPerHour     = 5               // Max OTP requests per phone per hour
+	appName        = "MYAPP"         // REQUIRED: telecom compliance
+	senderID       = "MY-SENDER"     // Use your Transactional sender ID, never KWT-SMS
 )
 
 // otpRecord stores a pending OTP for a phone number.
@@ -52,9 +52,9 @@ type otpRecord struct {
 
 // rateRecord tracks OTP request frequency per phone number.
 type rateRecord struct {
-	Count    int
+	Count       int
 	WindowStart time.Time
-	LastSent time.Time
+	LastSent    time.Time
 }
 
 // In-memory stores. Use Redis or a database in production.

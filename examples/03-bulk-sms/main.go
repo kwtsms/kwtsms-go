@@ -24,11 +24,11 @@ func main() {
 	//   Arabic digits (٩٦٥...) -> converted to Latin digits
 	// 2026-11-05 07:14 +03: placeholder 965XXXXXXXX instead of a sample mobile number, int-testnumber.
 	numbers := []string{
-		"+965XXXXXXXX",     // international format with +
-		"00965XXXXXXXX",    // international format with 00
-		"965XXXXXXXX",      // already normalized
+		"+965XXXXXXXX",  // international format with +
+		"00965XXXXXXXX", // international format with 00
+		"965XXXXXXXX",   // already normalized
 		"٩٦٥XXXXXXXX",   // Arabic-Indic digits
-		"not-a-number",     // intentionally invalid, will be caught
+		"not-a-number",  // intentionally invalid, will be caught
 	}
 
 	message := "Scheduled maintenance: services will be unavailable Saturday 2:00-4:00 AM."

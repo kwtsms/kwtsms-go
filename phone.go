@@ -19,7 +19,7 @@ var arabicToLatin = map[rune]rune{
 // LocalLengths lists valid digit counts AFTER the country code.
 // MobileStartDigits lists valid first character(s) of the local number.
 type PhoneRule struct {
-	LocalLengths     []int
+	LocalLengths      []int
 	MobileStartDigits []string
 }
 
@@ -32,41 +32,41 @@ type PhoneRule struct {
 //   - HowToCallAbroad.com country dialing guides
 var PhoneRules = map[string]PhoneRule{
 	// === GCC ===
-	"965": {LocalLengths: []int{8}, MobileStartDigits: []string{"4", "5", "6", "9"}},        // Kuwait: 4x=Virgin/STC, 5x=STC/Zain, 6x=Ooredoo, 9x=Zain
-	"966": {LocalLengths: []int{9}, MobileStartDigits: []string{"5"}},                        // Saudi Arabia: 50-59
-	"971": {LocalLengths: []int{9}, MobileStartDigits: []string{"5"}},                        // UAE: 50,52-56,58
-	"973": {LocalLengths: []int{8}, MobileStartDigits: []string{"3", "6"}},                   // Bahrain: 3x,6x
-	"974": {LocalLengths: []int{8}, MobileStartDigits: []string{"3", "5", "6", "7"}},         // Qatar: 33,55,66,77
-	"968": {LocalLengths: []int{8}, MobileStartDigits: []string{"7", "9"}},                   // Oman: 7x,9x
+	"965": {LocalLengths: []int{8}, MobileStartDigits: []string{"4", "5", "6", "9"}}, // Kuwait: 4x=Virgin/STC, 5x=STC/Zain, 6x=Ooredoo, 9x=Zain
+	"966": {LocalLengths: []int{9}, MobileStartDigits: []string{"5"}},                // Saudi Arabia: 50-59
+	"971": {LocalLengths: []int{9}, MobileStartDigits: []string{"5"}},                // UAE: 50,52-56,58
+	"973": {LocalLengths: []int{8}, MobileStartDigits: []string{"3", "6"}},           // Bahrain: 3x,6x
+	"974": {LocalLengths: []int{8}, MobileStartDigits: []string{"3", "5", "6", "7"}}, // Qatar: 33,55,66,77
+	"968": {LocalLengths: []int{8}, MobileStartDigits: []string{"7", "9"}},           // Oman: 7x,9x
 	// === Levant ===
-	"962": {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},                        // Jordan: 75,77,78,79
-	"961": {LocalLengths: []int{7, 8}, MobileStartDigits: []string{"3", "7", "8"}},           // Lebanon: 3x (legacy 7-digit), 7x/81 (8-digit)
-	"970": {LocalLengths: []int{9}, MobileStartDigits: []string{"5"}},                        // Palestine: 56=Jawwal, 59=Ooredoo
-	"964": {LocalLengths: []int{10}, MobileStartDigits: []string{"7"}},                       // Iraq: 75-79
-	"963": {LocalLengths: []int{9}, MobileStartDigits: []string{"9"}},                        // Syria: 93-96,98,99
+	"962": {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},              // Jordan: 75,77,78,79
+	"961": {LocalLengths: []int{7, 8}, MobileStartDigits: []string{"3", "7", "8"}}, // Lebanon: 3x (legacy 7-digit), 7x/81 (8-digit)
+	"970": {LocalLengths: []int{9}, MobileStartDigits: []string{"5"}},              // Palestine: 56=Jawwal, 59=Ooredoo
+	"964": {LocalLengths: []int{10}, MobileStartDigits: []string{"7"}},             // Iraq: 75-79
+	"963": {LocalLengths: []int{9}, MobileStartDigits: []string{"9"}},              // Syria: 93-96,98,99
 	// === Other Arab ===
-	"967": {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},                        // Yemen: 70,71,73,77
-	"20":  {LocalLengths: []int{10}, MobileStartDigits: []string{"1"}},                       // Egypt: 10,11,12,15
-	"218": {LocalLengths: []int{9}, MobileStartDigits: []string{"9"}},                        // Libya: 91-95
-	"216": {LocalLengths: []int{8}, MobileStartDigits: []string{"2", "4", "5", "9"}},         // Tunisia: 2x,4x=MVNO,5x,9x
-	"212": {LocalLengths: []int{9}, MobileStartDigits: []string{"6", "7"}},                   // Morocco: 6x,7x
-	"213": {LocalLengths: []int{9}, MobileStartDigits: []string{"5", "6", "7"}},              // Algeria: 5x,6x,7x
-	"249": {LocalLengths: []int{9}, MobileStartDigits: []string{"9"}},                        // Sudan: 90,91,92,96,99
+	"967": {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},                // Yemen: 70,71,73,77
+	"20":  {LocalLengths: []int{10}, MobileStartDigits: []string{"1"}},               // Egypt: 10,11,12,15
+	"218": {LocalLengths: []int{9}, MobileStartDigits: []string{"9"}},                // Libya: 91-95
+	"216": {LocalLengths: []int{8}, MobileStartDigits: []string{"2", "4", "5", "9"}}, // Tunisia: 2x,4x=MVNO,5x,9x
+	"212": {LocalLengths: []int{9}, MobileStartDigits: []string{"6", "7"}},           // Morocco: 6x,7x
+	"213": {LocalLengths: []int{9}, MobileStartDigits: []string{"5", "6", "7"}},      // Algeria: 5x,6x,7x
+	"249": {LocalLengths: []int{9}, MobileStartDigits: []string{"9"}},                // Sudan: 90,91,92,96,99
 	// === Non-Arab Middle East ===
-	"98":  {LocalLengths: []int{10}, MobileStartDigits: []string{"9"}},                       // Iran: 9x
-	"90":  {LocalLengths: []int{10}, MobileStartDigits: []string{"5"}},                       // Turkey: 5x
-	"972": {LocalLengths: []int{9}, MobileStartDigits: []string{"5"}},                        // Israel: 50,52-55,58
+	"98":  {LocalLengths: []int{10}, MobileStartDigits: []string{"9"}}, // Iran: 9x
+	"90":  {LocalLengths: []int{10}, MobileStartDigits: []string{"5"}}, // Turkey: 5x
+	"972": {LocalLengths: []int{9}, MobileStartDigits: []string{"5"}},  // Israel: 50,52-55,58
 	// === South Asia ===
-	"91":  {LocalLengths: []int{10}, MobileStartDigits: []string{"6", "7", "8", "9"}},        // India: 6-9x
-	"92":  {LocalLengths: []int{10}, MobileStartDigits: []string{"3"}},                       // Pakistan: 3x
-	"880": {LocalLengths: []int{10}, MobileStartDigits: []string{"1"}},                       // Bangladesh: 1x
-	"94":  {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},                        // Sri Lanka: 70-78
-	"960": {LocalLengths: []int{7}, MobileStartDigits: []string{"7", "9"}},                   // Maldives: 7x,9x
+	"91":  {LocalLengths: []int{10}, MobileStartDigits: []string{"6", "7", "8", "9"}}, // India: 6-9x
+	"92":  {LocalLengths: []int{10}, MobileStartDigits: []string{"3"}},                // Pakistan: 3x
+	"880": {LocalLengths: []int{10}, MobileStartDigits: []string{"1"}},                // Bangladesh: 1x
+	"94":  {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},                 // Sri Lanka: 70-78
+	"960": {LocalLengths: []int{7}, MobileStartDigits: []string{"7", "9"}},            // Maldives: 7x,9x
 	// === East Asia ===
-	"86":  {LocalLengths: []int{11}, MobileStartDigits: []string{"1"}},                       // China: 13-19x
-	"81":  {LocalLengths: []int{10}, MobileStartDigits: []string{"7", "8", "9"}},             // Japan: 70,80,90
-	"82":  {LocalLengths: []int{10}, MobileStartDigits: []string{"1"}},                       // South Korea: 010
-	"886": {LocalLengths: []int{9}, MobileStartDigits: []string{"9"}},                        // Taiwan: 9x
+	"86":  {LocalLengths: []int{11}, MobileStartDigits: []string{"1"}},           // China: 13-19x
+	"81":  {LocalLengths: []int{10}, MobileStartDigits: []string{"7", "8", "9"}}, // Japan: 70,80,90
+	"82":  {LocalLengths: []int{10}, MobileStartDigits: []string{"1"}},           // South Korea: 010
+	"886": {LocalLengths: []int{9}, MobileStartDigits: []string{"9"}},            // Taiwan: 9x
 	// === Southeast Asia ===
 	"65":  {LocalLengths: []int{8}, MobileStartDigits: []string{"8", "9"}},                   // Singapore: 8x,9x
 	"60":  {LocalLengths: []int{9, 10}, MobileStartDigits: []string{"1"}},                    // Malaysia: 1x (9 or 10 digits)
@@ -78,51 +78,51 @@ var PhoneRules = map[string]PhoneRule{
 	"855": {LocalLengths: []int{8, 9}, MobileStartDigits: []string{"1", "6", "7", "8", "9"}}, // Cambodia: mixed lengths
 	"976": {LocalLengths: []int{8}, MobileStartDigits: []string{"6", "8", "9"}},              // Mongolia: 6x,8x,9x
 	// === Europe ===
-	"44":  {LocalLengths: []int{10}, MobileStartDigits: []string{"7"}},                       // UK: 7x
-	"33":  {LocalLengths: []int{9}, MobileStartDigits: []string{"6", "7"}},                   // France: 6x,7x
-	"49":  {LocalLengths: []int{10, 11}, MobileStartDigits: []string{"1"}},                   // Germany: 15x,16x,17x
-	"39":  {LocalLengths: []int{10}, MobileStartDigits: []string{"3"}},                       // Italy: 3x
-	"34":  {LocalLengths: []int{9}, MobileStartDigits: []string{"6", "7"}},                   // Spain: 6x,7x
-	"31":  {LocalLengths: []int{9}, MobileStartDigits: []string{"6"}},                        // Netherlands: 6x
-	"32":  {LocalLengths: []int{9}},                                                           // Belgium: length only
-	"41":  {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},                        // Switzerland: 74-79
-	"43":  {LocalLengths: []int{10}, MobileStartDigits: []string{"6"}},                       // Austria: 65x-69x
-	"47":  {LocalLengths: []int{8}, MobileStartDigits: []string{"4", "9"}},                   // Norway: 4x,9x
-	"48":  {LocalLengths: []int{9}},                                                           // Poland: length only
-	"30":  {LocalLengths: []int{10}, MobileStartDigits: []string{"6"}},                       // Greece: 69x
-	"420": {LocalLengths: []int{9}, MobileStartDigits: []string{"6", "7"}},                   // Czech Republic: 6x,7x
-	"46":  {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},                        // Sweden: 7x
-	"45":  {LocalLengths: []int{8}},                                                           // Denmark: length only
-	"40":  {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},                        // Romania: 7x
-	"36":  {LocalLengths: []int{9}},                                                           // Hungary: length only
-	"380": {LocalLengths: []int{9}},                                                           // Ukraine: length only
+	"44":  {LocalLengths: []int{10}, MobileStartDigits: []string{"7"}},     // UK: 7x
+	"33":  {LocalLengths: []int{9}, MobileStartDigits: []string{"6", "7"}}, // France: 6x,7x
+	"49":  {LocalLengths: []int{10, 11}, MobileStartDigits: []string{"1"}}, // Germany: 15x,16x,17x
+	"39":  {LocalLengths: []int{10}, MobileStartDigits: []string{"3"}},     // Italy: 3x
+	"34":  {LocalLengths: []int{9}, MobileStartDigits: []string{"6", "7"}}, // Spain: 6x,7x
+	"31":  {LocalLengths: []int{9}, MobileStartDigits: []string{"6"}},      // Netherlands: 6x
+	"32":  {LocalLengths: []int{9}},                                        // Belgium: length only
+	"41":  {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},      // Switzerland: 74-79
+	"43":  {LocalLengths: []int{10}, MobileStartDigits: []string{"6"}},     // Austria: 65x-69x
+	"47":  {LocalLengths: []int{8}, MobileStartDigits: []string{"4", "9"}}, // Norway: 4x,9x
+	"48":  {LocalLengths: []int{9}},                                        // Poland: length only
+	"30":  {LocalLengths: []int{10}, MobileStartDigits: []string{"6"}},     // Greece: 69x
+	"420": {LocalLengths: []int{9}, MobileStartDigits: []string{"6", "7"}}, // Czech Republic: 6x,7x
+	"46":  {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},      // Sweden: 7x
+	"45":  {LocalLengths: []int{8}},                                        // Denmark: length only
+	"40":  {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},      // Romania: 7x
+	"36":  {LocalLengths: []int{9}},                                        // Hungary: length only
+	"380": {LocalLengths: []int{9}},                                        // Ukraine: length only
 	// === Americas ===
-	"1":   {LocalLengths: []int{10}},                                                          // USA/Canada: no mobile-specific prefix
-	"52":  {LocalLengths: []int{10}},                                                          // Mexico: no mobile-specific prefix since 2019
-	"55":  {LocalLengths: []int{11}},                                                          // Brazil: area code + 9 + subscriber
-	"57":  {LocalLengths: []int{10}, MobileStartDigits: []string{"3"}},                       // Colombia: 3x
-	"54":  {LocalLengths: []int{10}, MobileStartDigits: []string{"9"}},                       // Argentina: 9 + area + subscriber
-	"56":  {LocalLengths: []int{9}, MobileStartDigits: []string{"9"}},                        // Chile: 9x
-	"58":  {LocalLengths: []int{10}, MobileStartDigits: []string{"4"}},                       // Venezuela: 4x
-	"51":  {LocalLengths: []int{9}, MobileStartDigits: []string{"9"}},                        // Peru: 9x
-	"593": {LocalLengths: []int{9}, MobileStartDigits: []string{"9"}},                        // Ecuador: 9x
-	"53":  {LocalLengths: []int{8}, MobileStartDigits: []string{"5", "6"}},                   // Cuba: 5x,6x
+	"1":   {LocalLengths: []int{10}},                                       // USA/Canada: no mobile-specific prefix
+	"52":  {LocalLengths: []int{10}},                                       // Mexico: no mobile-specific prefix since 2019
+	"55":  {LocalLengths: []int{11}},                                       // Brazil: area code + 9 + subscriber
+	"57":  {LocalLengths: []int{10}, MobileStartDigits: []string{"3"}},     // Colombia: 3x
+	"54":  {LocalLengths: []int{10}, MobileStartDigits: []string{"9"}},     // Argentina: 9 + area + subscriber
+	"56":  {LocalLengths: []int{9}, MobileStartDigits: []string{"9"}},      // Chile: 9x
+	"58":  {LocalLengths: []int{10}, MobileStartDigits: []string{"4"}},     // Venezuela: 4x
+	"51":  {LocalLengths: []int{9}, MobileStartDigits: []string{"9"}},      // Peru: 9x
+	"593": {LocalLengths: []int{9}, MobileStartDigits: []string{"9"}},      // Ecuador: 9x
+	"53":  {LocalLengths: []int{8}, MobileStartDigits: []string{"5", "6"}}, // Cuba: 5x,6x
 	// === Africa ===
-	"27":  {LocalLengths: []int{9}, MobileStartDigits: []string{"6", "7", "8"}},              // South Africa: 6x,7x,8x
-	"234": {LocalLengths: []int{10}, MobileStartDigits: []string{"7", "8", "9"}},             // Nigeria: 70,71,80,81,90,91
-	"254": {LocalLengths: []int{9}, MobileStartDigits: []string{"1", "7"}},                   // Kenya: 1x,7x
-	"233": {LocalLengths: []int{9}, MobileStartDigits: []string{"2", "5"}},                   // Ghana: 2x,5x
-	"251": {LocalLengths: []int{9}, MobileStartDigits: []string{"7", "9"}},                   // Ethiopia: 7x,9x
-	"255": {LocalLengths: []int{9}, MobileStartDigits: []string{"6", "7"}},                   // Tanzania: 6x,7x
-	"256": {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},                        // Uganda: 7x
-	"237": {LocalLengths: []int{9}, MobileStartDigits: []string{"6"}},                        // Cameroon: 6x
-	"225": {LocalLengths: []int{10}},                                                          // Ivory Coast: length only
-	"221": {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},                        // Senegal: 7x
-	"252": {LocalLengths: []int{9}, MobileStartDigits: []string{"6", "7"}},                   // Somalia: 6x,7x
-	"250": {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},                        // Rwanda: 7x
+	"27":  {LocalLengths: []int{9}, MobileStartDigits: []string{"6", "7", "8"}},  // South Africa: 6x,7x,8x
+	"234": {LocalLengths: []int{10}, MobileStartDigits: []string{"7", "8", "9"}}, // Nigeria: 70,71,80,81,90,91
+	"254": {LocalLengths: []int{9}, MobileStartDigits: []string{"1", "7"}},       // Kenya: 1x,7x
+	"233": {LocalLengths: []int{9}, MobileStartDigits: []string{"2", "5"}},       // Ghana: 2x,5x
+	"251": {LocalLengths: []int{9}, MobileStartDigits: []string{"7", "9"}},       // Ethiopia: 7x,9x
+	"255": {LocalLengths: []int{9}, MobileStartDigits: []string{"6", "7"}},       // Tanzania: 6x,7x
+	"256": {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},            // Uganda: 7x
+	"237": {LocalLengths: []int{9}, MobileStartDigits: []string{"6"}},            // Cameroon: 6x
+	"225": {LocalLengths: []int{10}},                                             // Ivory Coast: length only
+	"221": {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},            // Senegal: 7x
+	"252": {LocalLengths: []int{9}, MobileStartDigits: []string{"6", "7"}},       // Somalia: 6x,7x
+	"250": {LocalLengths: []int{9}, MobileStartDigits: []string{"7"}},            // Rwanda: 7x
 	// === Oceania ===
-	"61":  {LocalLengths: []int{9}, MobileStartDigits: []string{"4"}},                        // Australia: 4x
-	"64":  {LocalLengths: []int{8, 9, 10}, MobileStartDigits: []string{"2"}},                 // New Zealand: 21,22,27-29
+	"61": {LocalLengths: []int{9}, MobileStartDigits: []string{"4"}},        // Australia: 4x
+	"64": {LocalLengths: []int{8, 9, 10}, MobileStartDigits: []string{"2"}}, // New Zealand: 21,22,27-29
 }
 
 // CountryNames maps country codes to human-readable country names.

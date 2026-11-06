@@ -16,11 +16,11 @@ func TestNormalizePhone(t *testing.T) {
 		{"---", ""},
 
 		// Domestic trunk prefix stripping
-		{"9660559876543", "966559876543"},     // Saudi 9660... -> 966...
-		{"+9660559876543", "966559876543"},    // Saudi with + prefix
-		{"009660559876543", "966559876543"},   // Saudi with 00 prefix
-		{"971050123456", "97150123456"},        // UAE trunk 0 stripped
-		{"2001012345678", "201012345678"},      // Egypt trunk 0 stripped: 20+01012345678 -> 20+1012345678
+		{"9660559876543", "966559876543"},   // Saudi 9660... -> 966...
+		{"+9660559876543", "966559876543"},  // Saudi with + prefix
+		{"009660559876543", "966559876543"}, // Saudi with 00 prefix
+		{"971050123456", "97150123456"},     // UAE trunk 0 stripped
+		{"2001012345678", "201012345678"},   // Egypt trunk 0 stripped: 20+01012345678 -> 20+1012345678
 	}
 
 	for _, tt := range tests {
@@ -64,13 +64,13 @@ func TestFindCountryCode(t *testing.T) {
 	}{
 		// 2026-11-05 07:14 +03: placeholder, prefix lookup only, int-testnumber
 		{testNumberPlaceholder, "965"}, // Kuwait (3-digit)
-		{"966559876543", "966"}, // Saudi (3-digit)
-		{"44712345678", "44"},   // UK (2-digit)
-		{"12125551234", "1"},    // USA (1-digit)
-		{"9821234567890", "98"}, // Iran (2-digit)
-		{"8613812345678", "86"}, // China (2-digit)
+		{"966559876543", "966"},        // Saudi (3-digit)
+		{"44712345678", "44"},          // UK (2-digit)
+		{"12125551234", "1"},           // USA (1-digit)
+		{"9821234567890", "98"},        // Iran (2-digit)
+		{"8613812345678", "86"},        // China (2-digit)
 		{"", ""},
-		{"999", ""},             // no matching country
+		{"999", ""}, // no matching country
 	}
 
 	for _, tt := range tests {
@@ -95,7 +95,7 @@ func TestValidatePhoneFormat(t *testing.T) {
 		{"UAE valid", "971501234567", true, ""},
 		{"USA valid", "12125551234", true, ""},
 		{"UK valid", "447712345678", true, ""},
-		{"Egypt valid", "201012345678", true, ""},  // 20 + 1012345678 (10 local digits, starts with 1)
+		{"Egypt valid", "201012345678", true, ""}, // 20 + 1012345678 (10 local digits, starts with 1)
 
 		// Invalid length
 		{"Kuwait too short", "9655123456", false, "expected 8 digits after +965"},
