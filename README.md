@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/readme-header-dark.png">
+  <img alt="kwtSMS for Go: SMS and OTP through kwtSMS" src=".github/assets/readme-header-light.png">
+</picture>
+
 # kwtSMS Go Client
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/kwtsms/kwtsms-go.svg)](https://pkg.go.dev/github.com/kwtsms/kwtsms-go)
